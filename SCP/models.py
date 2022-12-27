@@ -1,5 +1,5 @@
 from django.db import models
-from User.models import CustomerProfile, StoreProfile, WorkshopProfile
+from User.models import Customer, Store, Workshop
 from time import gmtime, strftime
 
 
@@ -35,7 +35,7 @@ class Part_Image(models.Model):
 
 class Store_parts(models.Model):
     sp_id = models.IntegerField(primary_key=True)
-    S_id = models.ForeignKey(StoreProfile, on_delete=models.CASCADE)
+    S_id = models.ForeignKey(Store, on_delete=models.CASCADE,  related_name='StoreParts')
     part_no = models.ForeignKey(Parts, on_delete=models.CASCADE)
     P_name = models.CharField(max_length=100)
     desc = models.CharField(max_length=200)
@@ -44,11 +44,11 @@ class Store_parts(models.Model):
 
 class Ordered_parts(models.Model):
     op_id = models.IntegerField(primary_key=True)
-    sp_id = models.ForeignKey(Store_parts, on_delete=models.CASCADE)
+    sp_id = models.ForeignKey(Store_parts, on_delete=models.CASCADE, related_name='StoreParts')
 
 
 class Store_Image(models.Model):
-    S_id = models.ForeignKey(StoreProfile, on_delete=models.CASCADE)
+    S_id = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='StoreInformation')
     image_field = models.ImageField(
         upload_to= 'static/images/profile/{0}'.format(strftime('%Y%m%d-%H%M%S',gmtime())) ,
         default='no-image.jpg' ,
@@ -67,10 +67,10 @@ class Store_Image(models.Model):
 
 class Customer_orders(models.Model):
     co_id = models.IntegerField(primary_key=True)
-    S_id = models.ForeignKey(StoreProfile, on_delete=models.CASCADE)
-    C_id = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    S_id = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='StoreOders')
+    C_id = models.ForeignKey(Customer, on_delete=models.CASCADE,related_name='CustomerOders')
     op_id = models.ForeignKey(Ordered_parts, on_delete=models.CASCADE)
-
+    Date = models.DateField()
 
 # Workshop Models are:
 #
@@ -84,12 +84,12 @@ class Customer_orders(models.Model):
 
 class Workshop_orders(models.Model):
     wo_id = models.IntegerField(primary_key=True)
-    W_id = models.ForeignKey(WorkshopProfile, on_delete=models.CASCADE)
+    W_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='Workshoporders')
     op_id = models.ForeignKey(Ordered_parts, on_delete=models.CASCADE)
 
 
 class Workshop_Image(models.Model):
-    W_id = models.ForeignKey(WorkshopProfile, on_delete=models.CASCADE)
+    W_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='WorkshopImg')
     image_field = models.ImageField(
         upload_to= 'static/images/profile/{0}'.format(strftime('%Y%m%d-%H%M%S',gmtime())) ,
         default='no-image.jpg' ,
@@ -102,14 +102,14 @@ class Workshop_Image(models.Model):
 
 class Services(models.Model):
     service_id = models.IntegerField(primary_key=True)
-    W_id = models.ForeignKey(WorkshopProfile, on_delete=models.CASCADE)
+    W_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='WorkshopServices')
     name = models.CharField(max_length=75)
 
 
 class Appointment(models.Model):
     service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
-    W_id = models.ForeignKey(WorkshopProfile, on_delete=models.CASCADE)
-    C_id = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    W_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='WorkshopAppointment')
+    C_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='CustomerAppointment')
     Date = models.DateField()
     Time = models.TimeField()
 
@@ -117,6 +117,6 @@ class Appointment(models.Model):
 class Offers(models.Model):
     offer_id = models.IntegerField(primary_key=True)
     service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
-    W_id = models.ForeignKey(WorkshopProfile, on_delete=models.CASCADE)
+    W_id = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='WorkshopOffers')
     offer_desc = models.CharField(max_length=200)
     offer_price = models.IntegerField()

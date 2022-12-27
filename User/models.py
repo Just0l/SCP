@@ -6,10 +6,6 @@ from django.dispatch import receiver
 
 # Create your models here.
 
-# Customer Models are:
-#
-# class Customer(AbstractUser):
-# class Customer_orders(models.Model):
 
 # Here we are using User class to have only one AbstractUser class
 # which includes the four user types 
@@ -21,7 +17,7 @@ class User(AbstractUser):
         STORE = "STORE", 'Store'
         WORKSHOP = "WORKSHOP", 'Workshop'
 
-    base_role = Role.ADMIN
+    base_role = {}
 
     role = models.CharField(max_length= 50, choices=Role.choices)
 
@@ -63,12 +59,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class CustomerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    C_id = models.IntegerField(primary_key=True)
-    C_name = models.CharField(max_length=50, null=True)
-    C_email = models.EmailField(max_length=50, null=True)
-    C_pass = models.CharField(max_length=30, null=True)
-    C_phone = models.CharField(max_length=12)
-    C_city = models.CharField(max_length=50, null=True)
+    C_id = models.IntegerField(null=True, blank=True)
 
 
 ##-- Store User Type --##
@@ -102,11 +93,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class StoreProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    S_id = models.IntegerField(primary_key=True)
-    S_name = models.CharField(max_length=50, null=True)
-    S_email = models.EmailField(max_length=50, null=True)
-    S_pass = models.CharField(max_length=30, null=True)
-    S_city = models.CharField(max_length=50, null=True)
+    S_id = models.IntegerField(null=True, blank=True)
 
 
 ##-- Workshop User Type --##
@@ -140,11 +127,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class WorkshopProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    W_id = models.IntegerField(primary_key=True)
-    W_name = models.CharField(max_length=50, null=True)
-    W_email = models.EmailField(max_length=50, null=True)
-    W_pass = models.CharField(max_length=30, null=True)
-    W_city = models.CharField(max_length=50, null=True)
-
-
-
+    W_id = models.IntegerField(null=True, blank=True)
