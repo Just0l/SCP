@@ -348,6 +348,14 @@
             <!-- Start Mobile Menu Bottom -->
             <div class="mobile-menu-bottom">
                 <!-- Start Mobile Menu Nav -->
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class"alert alert-{{message.tags}}">
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <div class="offcanvas-menu">
                     <ul>
                         <li>

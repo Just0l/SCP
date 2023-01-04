@@ -658,14 +658,27 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form register" data-aos="fade-up"  data-aos-delay="200">
                         <h3>Register</h3>
-                        <form action="#">
+                        <form method="POST">
+                            {% csrf_token %}
                             <div class="default-form-box mb-20">
                                 <label>Email address <span>*</span></label>
-                                <input type="text">
+                                {{form.email}}
+                                {% comment %} <input type="email"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>username <span>*</span></label>
+                                {{form.username}}
+                                {% comment %} <input type="text"> {% endcomment %}
                             </div>
                             <div class="default-form-box mb-20">
                                 <label>Passwords <span>*</span></label>
-                                <input type="password">
+                                {{form.password1}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>password <span>*</span></label>
+                                {{form.password2}}
+                                {% comment %} <input type="password"> {% endcomment %}
                             </div>
                             <div class="login_submit">
                                 <button type="submit">Register</button>
