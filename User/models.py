@@ -128,3 +128,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 class WorkshopProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     W_id = models.IntegerField(null=True, blank=True)
+
+
+
+
+

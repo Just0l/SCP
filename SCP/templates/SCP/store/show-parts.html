@@ -1,0 +1,28 @@
+{% extends 'SCP/store/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="row mb-5"> 
+{% for part in parts%}
+<div class="col-md-6 col-lg-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{part.part_obj.P_name}}</h5>
+        <h6 class="card-subtitle text-muted">Support card subtitle</h6>
+      </div>
+      {% comment %} {% if parts.image_field %} {% endcomment %}
+      <img class="img-fluid" src="{{ part.part_img.image_field.url}}" alt="Card image cap" />
+      {% comment %} {% endif %} {% endcomment %}
+      <div class="card-body">
+        <p class="card-text">{{part.part_obj.part_no}}</p>
+        <a href="javascript:void(0);" class="card-link">Card link</a>
+        <a href="javascript:void(0);" class="card-link">Another link</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

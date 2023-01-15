@@ -1,0 +1,78 @@
+{%extends 'SCP/store/base.html'%}
+
+{% block content%}
+{% load static %}
+
+    <h5 class="card-header">Add Part</h5>
+    <div class="card-body">
+        <form action="{% url 'scp:add-parts'%}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="mb-3 row">
+            <label for="html5-text-input" class="col-md-2 col-form-label">Part Name</label>
+            <div class="col-md-10">
+                <input class="form-control" name="P_name" type="text" id="html5-text-input" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="html5-text-input" class="col-md-2 col-form-label">Part Number</label>
+            <div class="col-md-10">
+                <input class="form-control" name="part_no" type="text"  id="html5-text-input" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="html5-text-input" class="col-md-2 col-form-label">Car Manufacture</label>
+            <div class="col-md-10">
+                <input class="form-control" name="car_manu" type="text" id="html5-text-input" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="html5-url-input" class="col-md-2 col-form-label">Car Model</label>
+            <div class="col-md-10">
+                <input class="form-control" name="car_name"type="text"  id="html5-url-input" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="html5-number-input" class="col-md-2 col-form-label">Manufacture Year</label>
+            <div class="col-md-10">
+                <input class="form-control" name="manufacture_year" type="number"  id="html5-number-input" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleFormControlSelect2" class="form-label">Categoriy </label>
+            <select multiple class="form-select" name="category" id="exampleFormControlSelect2" aria-label="Multiple select example">
+                <option selected>Select Part Category </option>
+                {% for category in categories%}
+                <option value="{{category.id}}">{{category.category_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div>
+            <label for="exampleFormControlTextarea1" class="form-label">Part Description </label>
+            <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Part Image</label>
+            <input class="form-control" name="image_field" type="file" id="formFile" />
+        </div>
+
+
+        <div class="form-check mt-3">
+            
+            <input class="form-check-input" name="original" type="checkbox" id="defaultCheck1" />
+            <label class="form-check-label" for="defaultCheck1"> Original? </label>
+          </div>
+          <br/>
+          <button class="btn btn-lg btn-primary">save</button>
+        </form>
+
+    </div>
+</div>
+
+</div>
+
+{% endblock %}

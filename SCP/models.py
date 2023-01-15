@@ -1,3 +1,4 @@
+from operator import index
 from django.db import models
 from User.models import Customer, Store, Workshop
 from time import gmtime, strftime
@@ -16,15 +17,28 @@ from time import gmtime, strftime
 # class Store_Image(models.Model):
 
 
+class Categories(models.Model):
+    category_name = models.CharField(max_length=100)
+
+
 class Parts(models.Model):
-    part_no = models.IntegerField(primary_key=True)
+    part_no = models.CharField(primary_key=True, max_length=20)
     P_name = models.CharField(max_length=100)
+    car_manu = models.CharField(max_length=150)
+    car_name = models.CharField(max_length=150)
+    manufacture_year = models.CharField(max_length=10)
+    original = models.BooleanField()
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    desc = models.TextField()
+    
+
+
 
    
 class Part_Image(models.Model):
     P_id = models.ForeignKey(Parts, on_delete=models.CASCADE)
     image_field = models.ImageField(
-        upload_to= 'static/images/profile/{0}'.format(strftime('%Y%m%d-%H%M%S',gmtime())) ,
+        upload_to= 'media/part_images/',
         default='no-image.jpg' ,
         width_field='imagewidth' ,
         height_field='imageheight' ,
@@ -34,12 +48,8 @@ class Part_Image(models.Model):
 
 
 class Store_parts(models.Model):
-    sp_id = models.IntegerField(primary_key=True)
     S_id = models.ForeignKey(Store, on_delete=models.CASCADE,  related_name='StoreParts')
-    part_no = models.ForeignKey(Parts, on_delete=models.CASCADE)
-    P_name = models.CharField(max_length=100)
-    desc = models.CharField(max_length=200)
-    car_make = models.CharField(max_length=50)
+    p_id =  models.ForeignKey(Parts, on_delete=models.CASCADE, related_name='parts')
 
 
 class Ordered_parts(models.Model):
@@ -50,7 +60,7 @@ class Ordered_parts(models.Model):
 class Store_Image(models.Model):
     S_id = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='StoreInformation')
     image_field = models.ImageField(
-        upload_to= 'static/images/profile/{0}'.format(strftime('%Y%m%d-%H%M%S',gmtime())) ,
+        upload_to= 'images/part/{0}'.format(strftime('%Y%m%d-%H%M%S',gmtime())) ,
         default='no-image.jpg' ,
         width_field='imagewidth' ,
         height_field='imageheight' ,
