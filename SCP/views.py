@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from SCP.models import *
 from . forms import CustomUserCreationForm, StoreCreationForm, WorkshopUserCreationForm, AddPartsForm, PartsImages
 from django.contrib import messages
+from User.models import User
 
 from django.views.generic import TemplateView, CreateView
 
@@ -47,19 +48,79 @@ def customer_account(request):
 
 def category_products(request, category_id):
 
-    category = get_object_or_404(Categories, pk=category_id)
+#    category = get_object_or_404(Categories, pk=category_id)
     categories = Categories.objects.all()
-    parts = Parts.objects.filter(category=category)
-    parts_pks = parts.values_list('pk', flat=True)
-    images= [Part_Image.objects.filter(P_id=pk) for pk in parts_pks]
+#    parts = Parts.objects.filter(category=category)
+#    parts_pks = parts.values_list('pk', flat=True)
+#    images= [Part_Image.objects.filter(P_id=pk) for pk in parts_pks]
+
+
+    all_parts = Parts.objects.all()
+    parts = []
+    print(type(all_parts))
+    for n in all_parts:
+
+        parts.append({"part_obj":n, "part_img":Part_Image.objects.get(P_id=n.part_no),"price":Store_parts.objects.all().filter(p_id=n.part_no).order_by('Price').first()})
+
 
     context = {
         'parts': parts,
-        'categories': categories,
-        'images': images
+        'categories': categories
         }
 
     return render(request, 'SCP/shop-grid-sidebar-left.html', context)
+
+def Product_Details(request,category_id):
+    PartID=request.GET['PartID']
+    part = Parts.objects.get(part_no=PartID)
+    Image = Part_Image.objects.get(P_id=part.part_no)
+    Storeparts = Store_parts.objects.all().filter(p_id=part.part_no)
+    Store = User.objects.all()
+    Stores = []
+    for n in Storeparts:
+        for i in Store:
+            if n.S_id.id==i.id:
+                Stores.append({"Store":i,"price":n})
+
+    print(Stores)
+    context={
+        "part":part,
+        "image": Image,
+        "store":Stores
+    }
+
+    return render(request, 'SCP/product-details-affiliate.html', context)
+
+
+
+def addtocart(request):
+    PartID=request.GET['PartID']
+    Storeparts = Store_parts.objects.get(id=PartID)
+    Cart.objects.create(C_id=User.objects.get(id=3),p_id=Storeparts)
+    response = redirect('/Cart/')
+    return response
+
+
+def CartPage(request):
+    cart = Cart.objects.all().filter(C_id=3)
+    parts = []
+    total=0
+    for n in cart:
+        parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"Quantity":n.Q,"price":Store_parts.objects.get(id=n.p_id.id).Price})
+        total+=Store_parts.objects.get(id=n.p_id.id).Price*n.Q
+    
+
+    context={
+        "parts":parts,
+        "total":total
+    }
+    
+    return render(request, 'SCP/cart.html', context)
+
+
+
+
+
 
 
 

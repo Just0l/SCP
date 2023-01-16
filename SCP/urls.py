@@ -25,5 +25,8 @@ urlpatterns = [
     path('store/add-parts/', views.add_parts, name='add-parts'),
     path('store/store-parts', views.store_parts, name='store-parts'),
     path('store/customers-orders', views.customers_orders, name='customers-orders'),
+    path('products/<int:category_id>/product-details-default/', views.Product_Details, name='customers-orders'),
+    path('Cart/', views.CartPage, name='CartPage'),
+    path('addtocart/', views.addtocart, name='addcart'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
