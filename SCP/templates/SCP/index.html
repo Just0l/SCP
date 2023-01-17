@@ -360,38 +360,16 @@
             <!-- Start Hero Slider Single -->
             <div class="hero-area-single">
                 <div class="hero-area-bg">
-                    <img class="hero-img" src="images/slider_images/home_1/aments_home_1_slider_1.jpg" alt="">
+                    <img class="hero-img" src="{% static 'images/categories_images/various-car-parts-accessories-isolated-260nw-673268599.webp'%}" alt="">
                 </div>
-                <div class="hero-content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-10 col-md-8 col-xl-6">
-                                <h5>World Best Quality</h5>
-                                <h2>New Car Parts</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiu</p>
-                                <a href="product-details-default.html" class="hero-button">Shopping Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div> <!-- End Hero Slider Single -->
             <!-- Start Hero Slider Single -->
             <div class="hero-area-single">
                 <div class="hero-area-bg">
-                    <img class="hero-img" src="images/slider_images/home_1/aments_home_1_slider_2.jpg" alt="">
+                    <img class="hero-img" src="{% static 'images/categories_images/various-car-parts-accessories-isolated-260nw-673268605.webp'%}" alt="">
                 </div>
-                <div class="hero-content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-10 col-md-8 col-xl-6">
-                                <h5>World Best Quality</h5>
-                                <h2>New Car Parts</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiu</p>
-                                <a href="product-details-default.html" class="hero-button">Shopping Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div> <!-- End Hero Slider Single -->
         </div>
     </div> <!-- ...:::: End Hero Area Section:::... -->
@@ -419,7 +397,7 @@
                         <!-- Start Product Catagory Single -->
                         <a href="{% url 'scp:products' category_id=category.id%}" class="product-catagory-single" data-aos="fade-up"  data-aos-delay="0">
                             <div class="product-catagory-img">
-                                <img src="{% static 'images/categories_images/aments_categories_01.jpg' %}" alt="">
+                                <img src="{% static 'images/categories_images/cat1.jpg' %}" alt="">
                             </div>
                             <div class="product-catagory-content">
                                 <h5 class="product-catagory-title">{{category.category_name}}</h5>

@@ -8,12 +8,12 @@ from django.conf.urls.static import static
 app_name = 'scp'
 
 urlpatterns = [
+    path('', views.home_page, name='home-page'),
     path('register/', views.register, name='registerUser'),
     path('login/', views.CustomerLogin.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='SCP/logout.html'), name='logout'),
-    path('', views.home_page, name='home-page'),
     path('account/', views.customer_account, name='account'),
-    path('products/<int:category_id>/', views.category_products, name='products'),
+    path('products/<int:category_id>/', views.all_products, name='products'),
     path('store/', views.store_main_page, name='store-home'),
     path('workshop/', views.workshop_main_page, name='workshop-home'),
     path('store/register', views.register_store, name='registerStore'),
@@ -29,6 +29,8 @@ urlpatterns = [
     path('Workshop/Delete/', views.Delete, name='delete-service'),
     path('Workshop/Update/', views.Update, name='update-service'),
     path('Workshop/Appointment/', views.ShowAppointment, name='make-app'),
-
+    path('product-details/<int:store_id>/<str:partNo>/', views.Product_Details, name='product-details'),
+    path('Cart/', views.CartPage, name='CartPage'),
+    path('Delete/', views.DeleteCart, name='DeleteCart'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

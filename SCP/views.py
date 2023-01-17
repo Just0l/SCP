@@ -80,22 +80,104 @@ def customer_account(request):
     return render(request, "SCP/my-account.html")
 
 
-def category_products(request, category_id):
+def all_products(request, category_id):
 
-    category = get_object_or_404(Categories, pk=category_id)
-    categories = Categories.objects.all()
-    parts = Parts.objects.filter(category=category)
-    parts_pks = parts.values_list("pk", flat=True)
-    images = [Part_Image.objects.filter(P_id=pk) for pk in parts_pks]
+   categories = Categories.objects.all()
 
-    context = {"parts": parts, "categories": categories, "images": images}
 
-    return render(request, "SCP/shop-grid-sidebar-left.html", context)
+   parts_relted_to_sotre = Store_parts.objects.all()
+   parts = []   
+   for part in parts_relted_to_sotre:
+    parts.append({
+        "part_obj":part.p_id,
+         "part_img":Part_Image.objects.get(P_id=part.p_id),
+         "price":part.Price,
+         "store": part.S_id
+         })
+
+
+   context = {
+        'parts': parts,
+        'categories': categories
+        }
+
+   return render(request, "SCP/products.html", context)
 
 
 def store_main_page(request):
 
     return render(request, "SCP/store/Dashboard.html")
+
+
+
+
+def Product_Details(request, store_id ,partNo):
+
+    Image = Part_Image.objects.get(P_id=partNo)
+    part_details = Parts.objects.get(part_no=partNo)
+    store_parts = Store_parts.objects.get(p_id=partNo ,S_id=store_id)
+
+    other_stores_with_the_same_products = Store_parts.objects.all().filter(p_id=partNo)
+    img = [Part_Image.objects.get(P_id=part.p_id) for part in other_stores_with_the_same_products]
+
+    context={
+        "part":part_details,
+        "image": Image,
+        "store":store_parts,
+        "others":other_stores_with_the_same_products,
+        "img":img
+    }
+    for p in img:
+        # print(p.p_id)
+        print(p.image_field)
+
+    if request.method =="POST":
+        Quantity=request.POST['Quantity']
+        if Cart.objects.all().filter(C_id=User.objects.get(id=request.user.id),p_id=other_stores_with_the_same_products.p_id).exists():
+            cart=Cart.objects.get(p_id=other_stores_with_the_same_products.p_id)
+            Q=int(cart.Q)
+            print(Q)
+            Q+=int(Quantity)
+            print(Q)
+            cart.Q=Q
+            cart.save()
+
+        else:
+            Cart.objects.create(C_id=User.objects.get(id=request.user.id),p_id=other_stores_with_the_same_products.p_id,Q=Quantity)
+        response = redirect('/Cart/')
+        return response
+       
+
+    return render(request, 'SCP/product-details.html', context)
+
+
+
+def DeleteCart(request):
+    ID=request.GET['DeleteID']
+    if Cart.objects.all().filter(id=ID).exists():
+        obj = Cart.objects.all().filter(id=ID)
+        obj.delete()
+    response = redirect('/Cart/')
+    return response
+
+
+def CartPage(request):
+    cart = Cart.objects.all().filter(C_id=request.user.id)
+    parts = []
+    total=0
+    for n in cart:
+        parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"cart":n,"price":Store_parts.objects.get(id=n.p_id.id)})
+        total+=Store_parts.objects.get(id=n.p_id.id).Price*n.Q
+    
+
+    context={
+        "parts":parts,
+        "total":total
+    }
+    
+    return render(request, 'SCP/cart.html', context)
+
+
 
 
 @user_passes_test(is_workshop, login_url="ws/login")
@@ -158,15 +240,12 @@ def add_parts(request):
         if form.is_valid() and imageForm.is_valid():
             added_part = form.save()
             part = Parts.objects.get(pk=added_part.part_no)
-            print(part)
             image = imageForm.cleaned_data["image_field"]
             Part_Image.objects.create(P_id=part, image_field=image)
             messages.success(request, "part added to your store !")
             return redirect("scp:add-parts")
 
         else:
-            print(form.errors)
-            print(f"image field error :{imageForm.errors}")
             messages.info(request, "add correct information")
             return redirect("scp:add-parts")
 

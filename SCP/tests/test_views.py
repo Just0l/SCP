@@ -21,11 +21,11 @@ class TestViewRespnses(TestCase):
         self.assertEqual(response.status_code, 200)
 
     
-    def test_login_page(self):
+    def test_workshop_login_page(self):
         '''
         Test login page response status and template
         '''
-        response = self.c.get(reverse('scp:login'))
+        response = self.c.get(reverse('scp:ws-login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'SCP/login.html')
 

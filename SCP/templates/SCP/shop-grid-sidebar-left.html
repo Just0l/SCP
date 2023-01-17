@@ -413,7 +413,7 @@
                                             {% for category in categories %}
                                             <label class="checkbox-default" for="catagory_1">
                                                 <a href="">
-                                                <input type="checkbox" class="category-checkbox" id="catagory_1">
+                                                <input type="checkbox" id="catagory_1">
                                                 </a>
                                                 <span>{{category.category_name}}</span>
                                             </label>
@@ -573,8 +573,8 @@
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-default-single border-around" data-aos="fade-up"  data-aos-delay="400">
                                                         <div class="product-img-warp">
-                                                            <a href="product-details-default.html" class="product-default-img-link">
-                                                                <img src="images/products_images/aments_products_image_2.jpg" alt="" class="product-default-img img-fluid">
+                                                            <a href="{% url 'scp:product-details' partNo=part.part_obj.part_no store_id=part.store.id%}" class="product-default-img-link">
+                                                                <img src="{{part.part_img.image_field.url}}" alt="" class="product-default-img img-fluid">
                                                             </a>
                                                             <div class="product-action-icon-link">
                                                                 <ul>
@@ -586,13 +586,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="product-default-content">
-                                                            <h6 class="product-default-link"><a href="product-details-default.html">{{part.P_name}}</a></h6>
-                                                            <span class="product-default-price"><del class="product-default-price-off">$30.12</del> $25.12</span>
+                                                            <h6 class="product-default-link"><a href="product-details-default/?PartID={{part.part_obj.part_no}}&SP={{part.price}}">{{part.P_name}}</a></h6>
+                                                            <span class="product-default-price">${{part.price}}</span>
                                                         </div>
                                                     </div> <!-- End Product Defautlt Single -->
                                                 </div>
+                                                {% endfor %}
                                             </div>
-                                            {% endfor %}
+                                            
                                         </div> 
                                         <!-- End Grid View Product -->
                                         <!-- Start List View Product -->
