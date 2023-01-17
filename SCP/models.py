@@ -24,6 +24,7 @@ class Categories(models.Model):
 class Parts(models.Model):
     part_no = models.CharField(primary_key=True, max_length=20)
     P_name = models.CharField(max_length=100)
+    quantity = models.IntegerField()
     car_manu = models.CharField(max_length=150)
     car_name = models.CharField(max_length=150)
     manufacture_year = models.CharField(max_length=10)
@@ -49,7 +50,14 @@ class Part_Image(models.Model):
 
 class Store_parts(models.Model):
     S_id = models.ForeignKey(Store, on_delete=models.CASCADE,  related_name='StoreParts')
+    Price = models.FloatField()
     p_id =  models.ForeignKey(Parts, on_delete=models.CASCADE, related_name='parts')
+
+
+class Cart(models.Model):
+    C_id = models.ForeignKey(Customer, on_delete=models.CASCADE,  related_name='CustomerCart')
+    p_id =  models.ForeignKey(Store_parts, on_delete=models.CASCADE, related_name='Cart')
+    Q = models.IntegerField(default=1)
 
 
 class Ordered_parts(models.Model):
