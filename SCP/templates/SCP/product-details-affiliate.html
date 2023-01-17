@@ -430,7 +430,7 @@
                         <div class="product-details-text">
                             <h4 class="title">{{part.P_name}}</h4>
                             
-                            <h6 class="product-ref mb-20">Reference By:  {% with store|first as first_doc %}{{ first_doc.Store.username }}{% endwith %}</span></h6>
+                            <h6 class="product-ref mb-20">Reference By:  {{ SP.S_id.username }}</span></h6>
                             
                             <div class="d-flex align-items-center">
                                 <div class="product-review">
@@ -443,40 +443,36 @@
                                 <a href="" class="customer-review">(customer review )</a>
                             </div>
                             
-                            <div class="price">${% with store|first as first_doc %}{{ first_doc.price.Price }}{% endwith %}</div>
+                            <div class="price">${{ SP.Price }}</div>
                             <p>{{part.desc}}</p>
                         </div> <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
+                            <form method="post">
+                                {% csrf_token %} 
                             <h4 class="title">Available Options</h4>
                             <!-- Product Variable Single Item -->
+                            <div class="d-flex align-items-center">
+                                <div class="variable-single-item ">
+                                    <span>Quantity</span>
+                                    <div class="product-variable-quantity">
+                                        <input name="Quantity" min="1" max="100" value="1" type="number">
+                                    </div>
+                                </div>
+
                             
                             
                             <!-- Product Variable Single Item -->
-                            <div class="d-flex align-items-center">
-                                {%if store|length == 0 %}
-                                <div class="product-add-to-cart-btn">
-                                    <a href="/addtocart/?PartID={{store.price.id}}">Add To Cart{{store.price.id}}</a>
+                            <div class="col-lg-6 mb-20">
+                                <div class="order_button pt-15">
+                                    <button type="submit">Add To Cart</button>
                                 </div>
                             </div>
-                                {%else%}
-                                
-                                {% with store|first as first_doc %}
-                                <div class="product-add-to-cart-btn">
-                                    <a href="/addtocart/?PartID={{first_doc.price.id}}">Add To Cart</a>
-                                </div>
-                            </div>
-                            {% endwith %}
-                            {%endif%}
+                        </form>
                             <!-- Product Variable Single Item -->
                              <!-- End Product Variable Area -->
                         <!-- Start  Product Details Meta Area-->
-                        <div class="product-details-meta mb-20">
-                            <ul>
-                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart"><i class="icon-heart"></i>Add to wishlist</a></li>
-                                <li><a href=""><i class="icon-repeat"></i>Compare</a></li>
-                            </ul>
-                        </div> <!-- End  Product Details Meta Area-->
+                        <!-- End  Product Details Meta Area-->
                         <!-- Start  Product Details Social Area-->
                          <!-- End  Product Details Social Area-->
                     </div>
@@ -504,16 +500,16 @@
                         <div class="product-default-slider product-default-slider-4grids-1row">
                             <!-- Start Product Defautlt Single -->
                             {%for n in store%}
-                            {%if not forloop.first%}
+                            {%if SP.S_id  !=  n.Store%}
                             <div class="product-default-single border-around">
                                 <div class="product-img-warp">
-                                    <a href="/addtocart/?PartID={{n.price.id}}" class="product-default-img-link">
+                                    <a href="?PartID={{part.part_no}}&SP={{n.price.id}}" class="product-default-img-link">
                                         <img src="{{image.image_field.url}}" alt="" class="product-default-img img-fluid">
                                     </a>
                                     
                                 </div>
                                 <div class="product-default-content">
-                                    <h6 class="product-default-link"><a href="/addtocart/?PartID={{n.price.id}}">{{n.Store.username}}</a></h6>
+                                    <h6 class="product-default-link"><a href="?PartID={{part.part_no}}&SP={{n.price.id}}">{{n.Store.username}}</a></h6>
                                     <span class="product-default-price">${{n.price.Price}}</span>
                                 </div>
                             </div> <!-- End Product Defautlt Single -->

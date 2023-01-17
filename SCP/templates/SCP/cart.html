@@ -458,12 +458,12 @@
                                         {% if parts%}
                                         {%for n in parts%}
                                         <tr>
-                                            <td class="product_remove"><a href="/Customer/Delete/?DeleteID={{n.part_obj.part_no}}"><i class="fa fa-trash-o"></i></a></td>
+                                            <td class="product_remove"><a href="/Delete/?DeleteID={{n.cart.id}}"><i class="fa fa-trash-o"></i></a></td>
                                             <td class="product_thumb"><a href="product-details-default.html"><img src="{{n.part_img.image_field.url}}" alt=""></a></td>
                                             <td class="product_name"><a href="product-details-default.html">{{n.part_obj.P_name}}</a></td>
-                                            <td class="product-price">${{n.price}}</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1" max="100" value="{{n.Quantity}}" type="number"></td>
-                                            <td class="product-price">${% widthratio n.Quantity 1 n.price %}</td>
+                                            <td class="product-price">${{n.price.Price}}</td>
+                                            <td class="product_quantity"><label>Quantity</label> <input min="1" max="100" value="{{n.cart.Q}}" type="number"></td>
+                                            <td class="product-price">${% widthratio n.Quantity 1 n.price.Price %}</td>
                                         </tr> <!-- End Cart Single Item-->
                                         <!-- Start Cart Single Item-->
                                         {%endfor%}

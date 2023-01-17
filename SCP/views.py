@@ -70,11 +70,18 @@ def category_products(request, category_id):
 
     return render(request, 'SCP/shop-grid-sidebar-left.html', context)
 
+
+
+
+
+
+
 def Product_Details(request,category_id):
     PartID=request.GET['PartID']
     part = Parts.objects.get(part_no=PartID)
     Image = Part_Image.objects.get(P_id=part.part_no)
     Storeparts = Store_parts.objects.all().filter(p_id=part.part_no)
+    SP = Store_parts.objects.get(id=request.GET['SP'])
     Store = User.objects.all()
     Stores = []
     for n in Storeparts:
@@ -86,17 +93,35 @@ def Product_Details(request,category_id):
     context={
         "part":part,
         "image": Image,
-        "store":Stores
+        "store":Stores,
+        "SP":SP
     }
+    if request.method =="POST":
+        Quantity=request.POST['Quantity']
+        if Cart.objects.all().filter(C_id=User.objects.get(id=3),p_id=SP).exists():
+            cart=Cart.objects.get(p_id=SP)
+            Q=int(cart.Q)
+            print(Q)
+            Q+=int(Quantity)
+            print(Q)
+            cart.Q=Q
+            cart.save()
+
+        else:
+            Cart.objects.create(C_id=User.objects.get(id=3),p_id=SP,Q=Quantity)
+        response = redirect('/Cart/')
+        return response
+       
 
     return render(request, 'SCP/product-details-affiliate.html', context)
 
 
 
-def addtocart(request):
-    PartID=request.GET['PartID']
-    Storeparts = Store_parts.objects.get(id=PartID)
-    Cart.objects.create(C_id=User.objects.get(id=3),p_id=Storeparts)
+def DeleteCart(request):
+    ID=request.GET['DeleteID']
+    if Cart.objects.all().filter(id=ID).exists():
+        obj = Cart.objects.all().filter(id=ID)
+        obj.delete()
     response = redirect('/Cart/')
     return response
 
@@ -106,7 +131,7 @@ def CartPage(request):
     parts = []
     total=0
     for n in cart:
-        parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"Quantity":n.Q,"price":Store_parts.objects.get(id=n.p_id.id).Price})
+        parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"cart":n,"price":Store_parts.objects.get(id=n.p_id.id)})
         total+=Store_parts.objects.get(id=n.p_id.id).Price*n.Q
     
 
