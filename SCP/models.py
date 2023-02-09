@@ -104,11 +104,12 @@ class Workshop_Image(models.Model):
 
 
 class Services(models.Model):
-    service_id = models.IntegerField(primary_key=True)
     W_id = models.ForeignKey(
         Workshop, on_delete=models.CASCADE, related_name="WorkshopServices"
     )
     name = models.CharField(max_length=75)
+    price = models.IntegerField()
+    DESCRIPTION = models.TextField()
 
 
 class Appointment(models.Model):
@@ -117,7 +118,7 @@ class Appointment(models.Model):
         Workshop, on_delete=models.CASCADE, related_name="WorkshopAppointment"
     )
     C_id = models.ForeignKey(
-        Workshop, on_delete=models.CASCADE, related_name="CustomerAppointment"
+        Customer, on_delete=models.CASCADE, related_name="CustomerAppointment"
     )
     Date = models.DateField()
     Time = models.TimeField()

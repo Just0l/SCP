@@ -35,18 +35,34 @@ class AddPartsForm(ModelForm):
 
 
 class PartsImages(forms.Form):
-
     image_field = forms.ImageField()
+    
+    def __init__(self, *args, **kwargs):
+           super().__init__(*args, **kwargs)
+           self.fields['image_field'].widget.attrs.update({'class': 'form-control'})
+           
 
 
 
 class AddserviceForm(forms.Form):
     name = forms.CharField()
     price = forms.FloatField()
+    des = forms.CharField(widget=forms.Textarea)
 
+
+    def __init__(self, *args, **kwargs):
+           super().__init__(*args, **kwargs)
+           self.fields['name'].widget.attrs.update({'class': 'form-control'})
+           self.fields['price'].widget.attrs.update({'class': 'form-control'})
+           self.fields['des'].widget.attrs.update({'class': 'form-control'})
+    
 
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
 
+
+
+class UpdateCart(forms.Form):
+    Quantity=forms.IntegerField()
  

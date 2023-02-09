@@ -10,24 +10,18 @@
         <thead>
           <tr>
             <th>Services Name</th>
-            <th>Customer Username</th>
-            <th>Date</th>
-            <th>Time</th>
+            <th>Image</th>
             <th>Price</th>
           </tr>
         </thead>
         <tbody class="table-border-bottom-0">
         {%if obj%}
-        {% for type in obj1 %}
+        {% for type in obj %}
           <tr>
-            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{type.2.name}}</strong></td>
-            <td>{{type.0.username}}</td>
+            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{type.name}}</strong></td>
+            <td class="product_thumb"><img src="{{obj1.image_field.url}}" alt=""></td>
             <td>
-                {{ type.1.Date }}
-            </td>
-            <td>{{ type.1.Time }}</td>
-            <td>
-                ${{type.2.price}}
+                ${{ type.price }}
             </td>
           </tr>
           <tr>
