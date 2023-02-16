@@ -170,9 +170,17 @@ def all_products(request, category_id):
 
 
 def store_main_page(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STORE":
 
-    return render(request, "SCP/store/Dashboard.html")
+            return render(request, "SCP/store/Dashboard.html")
+        else:
+            response = redirect("/home/")
+            return response
 
+    else:
+        response = redirect("/home/")
+        return response
 
 
 
@@ -197,14 +205,16 @@ def Product_Details(request, SP ,partNo):
 
     if request.method =="POST":
         Quantity=request.POST['Quantity']
-        if Cart.objects.all().filter(C_id=request.user).exists():
-            cart=Cart.objects.get(p_id=store_parts)
-            Q=int(cart.Q)
-            print(Q)
-            Q+=int(Quantity)
-            print(Q)
-            cart.Q=Q
-            cart.save()
+        if request.user.is_authenticated:
+            if request.user.role == "CUSTOMER":
+                if Cart.objects.all().filter(C_id=request.user).exists():
+                    cart=Cart.objects.get(p_id=store_parts)
+                    Q=int(cart.Q)
+                    print(Q)
+                    Q+=int(Quantity)
+                    print(Q)
+                    cart.Q=Q
+                    cart.save()
 
         else:
             Cart.objects.create(C_id=request.user,p_id=store_parts,Q=Quantity)
@@ -217,51 +227,89 @@ def Product_Details(request, SP ,partNo):
 
 
 def DeleteCart(request):
-    ID=request.GET['DeleteID']
-    if Cart.objects.all().filter(id=ID).exists():
-        obj = Cart.objects.all().filter(id=ID)
-        obj.delete()
-    response = redirect('/Cart/')
-    return response
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            ID=request.GET['DeleteID']
+            if Cart.objects.all().filter(id=ID).exists():
+                obj = Cart.objects.all().filter(id=ID)
+                obj.delete()
+            response = redirect('/Cart/')
+            return response
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
 
 
 def CartPage(request):
-    cart = Cart.objects.all().filter(C_id=request.user)
-    form=UpdateCart()
-    parts = []
-    total=0
-    for n in cart:
-        parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"cart":n,"price":Store_parts.objects.get(id=n.p_id.id)})
-        total+=Store_parts.objects.get(id=n.p_id.id).Price*n.Q
-    
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            cart = Cart.objects.all().filter(C_id=request.user)
+            form=UpdateCart()
+            parts = []
+            total=0
+            for n in cart:
+                parts.append({"part_obj":Parts.objects.get(part_no=n.p_id.p_id.part_no), "part_img":Part_Image.objects.get(P_id=Parts.objects.get(part_no=n.p_id.p_id.part_no)),"cart":n,"price":Store_parts.objects.get(id=n.p_id.id)})
+                total+=Store_parts.objects.get(id=n.p_id.id).Price*n.Q
+            
 
-    context={
-        "parts":parts,
-        "total":total,
-        "form":form
-    }
-    
-    return render(request, 'SCP/cart.html', context)
+            context={
+                "parts":parts,
+                "total":total,
+                "form":form
+            }
+            
+            return render(request, 'SCP/cart.html', context)
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
+
 
 
 
 def CartUpdate(request,CartID):
-    if request.POST:
-        print(CartID)
-        cart=Cart.objects.get(id=CartID)
-        cart.Q=request.POST['Quantity']
-        cart.save()
-    response = redirect('/Cart/')
-    return response
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            if request.POST:
+                print(CartID)
+                cart=Cart.objects.get(id=CartID)
+                cart.Q=request.POST['Quantity']
+                cart.save()
+            response = redirect('/Cart/')
+            return response
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
+
+
 
 
 
 @user_passes_test(is_workshop, login_url="ws/login")
 def workshop_main_page(request):
+    if request.user.is_authenticated:
+        if request.user.role == "WORKSHOP":
 
     
-    return render(request, "SCP/ws/Dashboard.html")
+            return render(request, "SCP/ws/Dashboard.html")
+        else:
+            response = redirect("/home/")
+            return response
 
+    else:
+        response = redirect("/home/")
+        return response
 
 # Creating new Store Account
 
@@ -272,161 +320,244 @@ def workshop_main_page(request):
 
 
 def add_parts(request):
-    image=PartsImages()
-    if request.method == "POST":
-        imageForm = PartsImages(request.POST, request.FILES)
-        if imageForm.is_valid():
-            if not Parts.objects.all().filter(part_no=request.POST['part_no']).exists():
-                added_part = Parts.objects.create(part_no=request.POST['part_no'],
-                P_name=request.POST['P_name'],
-                car_manu=request.POST['car_manu'],
-                car_name=request.POST['car_name'],
-                manufacture_year=request.POST['P_name'],
-                original=True,
-                category=Categories.objects.get(id=request.POST['category']),
-                desc=request.POST['desc'])
-                store_part=Store_parts.objects.create(S_id=request.user,p_id=added_part,Price=request.POST['price'],quantity=1,)
-                store_part.save()
+    if request.user.is_authenticated:
+        if request.user.role == "STORE":
+            image=PartsImages()
+            if request.method == "POST":
+                imageForm = PartsImages(request.POST, request.FILES)
+                if imageForm.is_valid():
+                    if not Parts.objects.all().filter(part_no=request.POST['part_no']).exists():
+                        added_part = Parts.objects.create(part_no=request.POST['part_no'],
+                        P_name=request.POST['P_name'],
+                        car_manu=request.POST['car_manu'],
+                        car_name=request.POST['car_name'],
+                        manufacture_year=request.POST['P_name'],
+                        original=True,
+                        category=Categories.objects.get(id=request.POST['category']),
+                        desc=request.POST['desc'])
+                        store_part=Store_parts.objects.create(S_id=request.user,p_id=added_part,Price=request.POST['price'],quantity=1,)
+                        store_part.save()
 
-                image = imageForm.cleaned_data.get("image_field")
-                Part_Image.objects.create(P_id=added_part, image_field=image)
-                messages.success(request, "part added to your store !")
-                return redirect("scp:add-parts")
+                        image = imageForm.cleaned_data.get("image_field")
+                        Part_Image.objects.create(P_id=added_part, image_field=image)
+                        messages.success(request, "part added to your store !")
+                        return redirect("scp:add-parts")
+                    else:
+                        if not Store_parts.objects.all().filter(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no'])).exists():
+                            store_part=Store_parts.objects.create(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no']),Price=request.POST['price'],quantity=request.POST['quantity'])
+                            store_part.save()
+                            messages.warning(request, "part is already exist and it will be in your store !")
+                            return redirect("scp:add-parts")
+                        else:
+                            messages.error(request, "part is already exist !")
+                            return redirect("scp:add-parts")
+
+
+
+
             else:
-                if not Store_parts.objects.all().filter(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no'])).exists():
-                    store_part=Store_parts.objects.create(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no']),Price=request.POST['price'],quantity=request.POST['quantity'])
-                    store_part.save()
-                    messages.warning(request, "part is already exist and it will be in your store !")
-                    return redirect("scp:add-parts")
-                else:
-                    messages.error(request, "part is already exist !")
-                    return redirect("scp:add-parts")
-
-
-
+                category_types = {"categories": Categories.objects.all()}
+                form = AddPartsForm()
+                imageForm = PartsImages()
+                context = {"imageForm": imageForm, "categories": Categories.objects.all(),"image":image}
+                return render(request, "SCP/store/add-parts.html", context)
+        else:
+            response = redirect("/home/")
+            return response
 
     else:
-        category_types = {"categories": Categories.objects.all()}
-        form = AddPartsForm()
-        imageForm = PartsImages()
-        context = {"imageForm": imageForm, "categories": Categories.objects.all(),"image":image}
-        return render(request, "SCP/store/add-parts.html", context)
+        response = redirect("/home/")
+        return response
+
+
 
 
 def store_parts(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STORE":
+            all_parts = Store_parts.objects.all().filter(S_id=request.user)
+            parts_pks = all_parts.values_list("pk", flat=True)
+            parts = []
+            print(type(all_parts))
+            # images= Part_Image.objects.filter(P_id__in=parts_pks).select_related('P_id')
+            for n in all_parts:
 
-    all_parts = Store_parts.objects.all()
-    parts_pks = all_parts.values_list("pk", flat=True)
-    parts = []
-    print(type(all_parts))
-    # images= Part_Image.objects.filter(P_id__in=parts_pks).select_related('P_id')
-    for n in all_parts:
+                parts.append(
+                    {"part_obj": n.p_id, "part_img": Part_Image.objects.get(P_id=n.p_id.part_no)}
+                )
 
-        parts.append(
-            {"part_obj": n.p_id, "part_img": Part_Image.objects.get(P_id=n.p_id.part_no)}
-        )
+            print(parts)
 
-    print(parts)
+            return render(request, "SCP/store/show-parts.html", {"parts": parts})
+        else:
+            response = redirect("/home/")
+            return response
 
-    return render(request, "SCP/store/show-parts.html", {"parts": parts})
+    else:
+        response = redirect("/home/")
+        return response
 
 
 def customers_orders(request):
-    orders = Customer_orders.objects.all().filter(S_id=request.user)
+    if request.user.is_authenticated:
+        if request.user.role == "STORE":
+            orders = Customer_orders.objects.all().filter(S_id=request.user)
 
 
-    return render(request, "SCP/store/orders.html",{"orders":orders})
+            return render(request, "SCP/store/orders.html",{"orders":orders})
+        else:
+            response = redirect("/home/")
+            return response
 
+    else:
+        response = redirect("/home/")
+        return response
 
 
 def Payment(request):
-    cart = Cart.objects.all().filter(C_id=request.user.id)
-    total=0
-    for item in cart:
-        total=total+(item.Q*item.p_id.Price)
-    context = {
-        "Cart":cart,
-        "total":total
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            cart = Cart.objects.all().filter(C_id=request.user.id)
+            total=0
+            for item in cart:
+                total=total+(item.Q*item.p_id.Price)
+            context = {
+                "Cart":cart,
+                "total":total
 
-    }
-    return render(request, "SCP/checkout.html",context)
+            }
+            return render(request, "SCP/checkout.html",context)
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
+
+
 
 
 def Pay(request):
-    cart=Cart.objects.all().filter(C_id=request.user.id)
-    for item in cart:
-        temp=int(Ordered_parts.objects.all().count())
-        Ordered=Ordered_parts.objects.create(op_id=temp,sp_id=item.p_id)
-        Customer_orders.objects.create(S_id=item.p_id.S_id,C_id=request.user,op_id=Ordered,Date=datetime.datetime.now().date(),quantity=item.Q)
-        Part=Store_parts.objects.get(id=item.p_id.id)
-        Part.quantity=Part.quantity-item.Q
-        Part.save()
-    response = redirect("/Orders/")
-    return response
-    
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            cart=Cart.objects.all().filter(C_id=request.user.id)
+            for item in cart:
+                temp=int(Ordered_parts.objects.all().count())
+                Ordered=Ordered_parts.objects.create(op_id=temp,sp_id=item.p_id)
+                Customer_orders.objects.create(S_id=item.p_id.S_id,C_id=request.user,op_id=Ordered,Date=datetime.datetime.now().date(),quantity=item.Q)
+                Part=Store_parts.objects.get(id=item.p_id.id)
+                Part.quantity=Part.quantity-item.Q
+                Part.save()
+            response = redirect("/Orders/")
+            return response
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
 
 
 
 def ShowOrder(request):
-    orders = Customer_orders.objects.all().filter(C_id=request.user)
-    show=[]
-    for i in orders:
-        show.append({"orders":i,"image":Part_Image.objects.get(P_id=i.op_id.sp_id.p_id)})
-    context={"obj":show}
-    return render(request, "SCP/Showorders.html",context)
-    
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            orders = Customer_orders.objects.all().filter(C_id=request.user)
+            show=[]
+            for i in orders:
+                show.append({"orders":i,"image":Part_Image.objects.get(P_id=i.op_id.sp_id.p_id)})
+            context={"obj":show}
+            return render(request, "SCP/Showorders.html",context)
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
+
 
 
 def ShowServicesForCustomer(request):
+    
     services = Services.objects.all()
     context={"Services":services}
     return render(request, "SCP/Showservices.html", context)
-
+        
 
 
 
 def ShowServicesForCustomerDetails(request,SID):
+
     service = Services.objects.get(id=SID)
     context={"Services":service}
     return render(request, "SCP/ServicesDetails.html", context)
-
+       
 
 
 
 def PaymentForService(request,SID):
-    service = Services.objects.get(id=SID)
-    date=Dateandtime()
-    if request.method =='POST':
-        Appointment.objects.create(service_id=service,W_id=service.W_id,C_id=request.user,Date=request.POST['Date'],Time=request.POST['Time'])
-        response = redirect("/ShowAppointmentForCustomer/")
-        return response
-    context={"Services":service,
-    "Date":date
-    }
-    return render(request, "SCP/Servicecheckout.html", context)
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            service = Services.objects.get(id=SID)
+            date=Dateandtime()
+            if request.method =='POST':
+                Appointment.objects.create(service_id=service,W_id=service.W_id,C_id=request.user,Date=request.POST['Date'],Time=request.POST['Time'])
+                response = redirect("/ShowAppointmentForCustomer/")
+                return response
+            context={"Services":service,
+            "Date":date
+            }
+            return render(request, "SCP/Servicecheckout.html", context)
+        else:
+            response = redirect("/home/")
+            return response
 
+    else:
+        response = redirect("/home/")
+        return response
 
 
 
 def ShowAppointmentForCustomer(request):
-    appointment=Appointment.objects.all().filter(C_id=request.user)
-    context={"appointments":appointment}
-    return render(request, "SCP/ShowAppointmentForCustomer.html", context)
+    if request.user.is_authenticated:
+        if request.user.role == "CUSTOMER":
+            appointment=Appointment.objects.all().filter(C_id=request.user)
+            context={"appointments":appointment}
+            return render(request, "SCP/ShowAppointmentForCustomer.html", context)
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
 
 
 
 
 
 def ShowServices(request):
-    obj = Services.objects.all().filter(W_id=request.user.id)
+    if request.user.is_authenticated:
+        if request.user.role == "WORKSHOP":
+            obj = Services.objects.all().filter(W_id=request.user.id)
 
 
 
-    context = {
-        "obj": obj,
+            context = {
+                "obj": obj,
 
-    }
-    return render(request, "SCP/ws/Showservices.html", context)
+            }
+            return render(request, "SCP/ws/Showservices.html", context)
+        else:
+            response = redirect("/home/")
+            return response
+
+    else:
+        response = redirect("/home/")
+        return response
 
 
 
