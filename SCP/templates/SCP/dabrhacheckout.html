@@ -1,31 +1,6 @@
 {% extends 'SCP/base.html'%}
 
 {% block content %}
-
-    <!-- ...:::: Start Mobile Header Section:::... -->
-    <div class="mobile-header-section d-block d-lg-none">
-        <!-- Start Mobile Header Wrapper -->
-        <div class="mobile-header-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-between align-items-center">
-                        <div class="mobile-header--left">
-                             <a href="index.html" class="mobile-logo-link">
-                                <img src="assets/images/logo/logo.png" alt="" class="mobile-logo-img">
-                            </a>
-                        </div>
-                        <div class="mobile-header--right">
-                            <a href="#mobile-menu-offcanvas" class="mobile-menu offcanvas-toggle">
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- End Mobile Header Wrapper -->
-    </div> <!-- ...:::: Start Mobile Header Section:::... -->
     <!-- ...:::: Start Mobile Header Section:::... -->
     <div class="mobile-header-section d-block d-lg-none">
         <!-- Start Mobile Header Wrapper -->
@@ -391,13 +366,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
-                        <h3 class="breadcrumb-title">Service Details</h3>
+                        <h3 class="breadcrumb-title">Checkout</h3>
                         <div class="breadcrumb-nav">
                             <nav aria-label="breadcrumb">
                                 <ul>
                                     <li><a href="index.html">Home</a></li>
                                     <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Service Details</li>
+                                    <li class="active" aria-current="page">Checkout</li>
                                 </ul>
                             </nav>
                         </div>
@@ -407,72 +382,244 @@
         </div>
     </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-    <!-- Start Product Details Section -->
-    <div class="product-details-section">
+    <!-- ...:::: Start Checkout Section:::... -->
+    <div class="checkout_section">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="product-details-gallery-area" data-aos="fade-up"  data-aos-delay="0">
-                        <div class="product-large-image product-large-image-horaizontal">
-                            <div class="product-image-large-single zoom-image-hover">
-                                <img src="{{Services.image_field.url}}" alt="">
-                            </div>
-                            
-                        </div>
-                        <div class="product-image-thumb product-image-thumb-horizontal pos-relative">
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="product-details-content-area" data-aos="fade-up"  data-aos-delay="200">
-                        <!-- Start  Product Details Text Area-->
-                        <div class="product-details-text">
-                            <h4 class="title">{{Services.name}}</h4>
-                            
-                            <h6 class="product-ref mb-20">Reference By:  {{ Services.W_id.username }}</span></h6>
-                            
-                            <div class="d-flex align-items-center">
-                                <div class="product-review">
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-empty"><i class="fa fa-star"></i></span>
+
+            <!-- Start User Details Checkout Form -->
+            <div class="checkout_form" data-aos="fade-up"  data-aos-delay="400">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <form action="#">
+                            <h3>Billing Details</h3>
+                            <div class="row">
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>First Name <span>*</span></label>
+                                        <input type="text">
+                                    </div>
                                 </div>
-                                <a href="" class="customer-review">(customer review )</a>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Last Name <span>*</span></label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Company Name</label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label for="country">country <span>*</span></label>
+                                        <select class="country_option nice-select wide" name="country" id="country">
+                                            <option value="2">Bangladesh</option>
+                                            <option value="3">Algeria</option>
+                                            <option value="4">Afghanistan</option>
+                                            <option value="5">Ghana</option>
+                                            <option value="6">Albania</option>
+                                            <option value="7">Bahrain</option>
+                                            <option value="8">Colombia</option>
+                                            <option value="9">Dominican Republic</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Street address <span>*</span></label>
+                                        <input placeholder="House number and street name" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <input placeholder="Apartment, suite, unit etc. (optional)" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Town / City <span>*</span></label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>State / County <span>*</span></label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Phone<span>*</span></label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label> Email Address <span>*</span></label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="checkbox-default" for="newAccount" data-bs-toggle="collapse" data-bs-target="#newAccountPassword">
+                                        <input type="checkbox" id="newAccount">
+                                        <span>Create an account?</span>
+                                    </label>
+                                    <div id="newAccountPassword" class="collapse" data-parent="#newAccountPassword">
+                                        <div class="card-body1 default-form-box">
+                                            <label> Account password <span>*</span></label>
+                                            <input placeholder="password" type="password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse" data-bs-target="#anotherShipping">
+                                        <input type="checkbox" id="newShipping">
+                                        <span>Ship to a different address?</span>
+                                    </label>
+
+                                    <div id="anotherShipping" class="collapse" data-parent="#anotherShipping">
+                                        <div class="row">
+                                            <div class="col-lg-6 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>First Name <span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>Last Name <span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>Company Name</label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <div class="select_form_select default-form-box">
+                                                    <label for="countru_name">country <span>*</span></label>
+                                                    <select class="niceselect_option wide" name="cuntry" id="countru_name">
+                                                        <option value="2">Saudi Arabia</option>
+                                                        <option value="3">Algeria</option>
+                                                        <option value="7">Bahrain</option>
+                                                        <option value="8">Colombia</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>Street address <span>*</span></label>
+                                                    <input placeholder="House number and street name" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <div class="default-form-box">
+                                                    <input placeholder="Apartment, suite, unit etc. (optional)" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>Town / City <span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>State / County <span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-20">
+                                                <div class="default-form-box">
+                                                    <label>Phone<span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="default-form-box">
+                                                    <label> Email Address <span>*</span></label>
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="order-notes">
+                                        <label for="order_note">Order Notes</label>
+                                        <textarea id="order_note" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="price">${{ Services.price }}</div>
-                            <p>{{Services.DESCRIPTION}}</p>
-                        </div> <!-- End  Product Details Text Area-->
-                        <!-- Start Product Variable Area -->
-                        <div class="product-details-variable">
-                            <div class="product-add-to-cart-btn">
-                                <a href="{% url 'scp:PaymentForService' SID=Services.id%}"  data-bs-target="#modalAddcart">Booking an appointment</a>
+                        </form>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        
+                            <h3>Your order</h3>
+                            <div class="order_table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <td> {{dabrha.part_no}} </td>
+                                            <td> ${{offer.offer_price}}</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Cart Subtotal</th>
+                                            <td>${{offer.offer_price}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td><strong>$0.00</strong></td>
+                                        </tr>
+                                        <tr class="order_total">
+                                            <th>Order Total</th>
+                                            <td><strong>${{offer.offer_price}}</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <!-- Product Variable Single Item -->
-                             <!-- End Product Variable Area -->
-                        <!-- Start  Product Details Meta Area-->
-                        <!-- End  Product Details Meta Area-->
-                        <!-- Start  Product Details Social Area-->
-                         <!-- End  Product Details Social Area-->
+                            <div class="payment_method">
+                                
+                                <div class="panel-default">
+                                    <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse" data-bs-target="#methodPaypal">
+                                        <input type="checkbox" id="currencyPaypal">
+                                        <span>PayPal</span>
+                                    </label>
+                                    <div id="methodPaypal" class="collapse " data-parent="#methodPaypal">
+                                        <div class="card-body1">
+                                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                <div class="checkout_btn">
+                                    <button class="btn btn-danger btn-md" type="submit">Proceed to PayPal</button>
+                                </div>
+                            </form>
+                            </div>
+                        
                     </div>
                 </div>
-            </div>
+            </div> <!-- Start User Details Checkout Form -->
         </div>
-    </div> <!-- End Product Details Section -->
+    </div><!-- ...:::: End Checkout Section:::... -->
 
-     <!-- End Product Wrapper -->
-    </div> 
-
-
-
-
-
-
-
-    
     <!-- ...:::: Start Footer Section:::... -->
     <footer class="footer-section section-top-gap-100">
         <!-- Start Footer Top Area -->
@@ -735,4 +882,5 @@
             </div>
         </div>
     </div> <!-- End Modal Quickview cart -->
+
     {% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'SCP/store/base.html' %}
+
+{% block content %}
+{% load static %}
+
+{% for request in requests %}
+<div class="row mb-5">
+    <div class="col-md">
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img class="card-img card-img-left" src="{{request.img}}" alt="Card image" />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{request.P_name}}</h5>
+              <p class="card-text">
+                {{request.desc}}
+              </p>
+              <p class="card-text"><small class="text-muted"> # Request No: {{request.pk}}</small></p>
+              <div class="input-group">
+                <form method="POST" action="{% url 'scp:dabrha-orders-with-id' request_id=request.pk%}">
+                  {% csrf_token %}
+                <button class="btn btn-outline-primary" type="submit" id="button-addon1">make an offer</button>
+                <input
+                
+                  name="offer_price"
+                  type="text"
+                  class="form-control"
+                  placeholder="enter price"
+                  aria-label="Example text with button addon"
+                  aria-describedby="button-addon1"
+                />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

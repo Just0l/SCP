@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from User.models import Customer, Store, Workshop
-from .models import Parts, Part_Image
+from .models import Parts, Part_Image, DabrhaRequest, dabrha_offers
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -93,3 +93,16 @@ class LoginForm(forms.Form):
 class UpdateCart(forms.Form):
     Quantity=forms.IntegerField()
  
+
+
+
+
+class DabrhaRequestForm(ModelForm):
+    class Meta:
+        model = DabrhaRequest
+        fields = '__all__'
+
+class DabrhaRequestFormForStores(ModelForm):
+    class Meta:
+        model= dabrha_offers
+        fields = '__all__'

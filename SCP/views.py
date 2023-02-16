@@ -5,18 +5,7 @@ from django.forms import ImageField
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from SCP.models import *
-from .forms import (
-    CustomUserCreationForm,
-    StoreCreationForm,
-    WorkshopUserCreationForm,
-    AddPartsForm,
-    PartsImages,
-    AddserviceForm,
-    UpdateCart,
-    ServiceImage,
-    Dateandtime,
-    LoginForm,
-)
+from .forms import *
 from django.contrib import messages
 from User.models import User
 from django.contrib.auth.decorators import user_passes_test
@@ -449,6 +438,7 @@ def Pay(request):
                 Part=Store_parts.objects.get(id=item.p_id.id)
                 Part.quantity=Part.quantity-item.Q
                 Part.save()
+                item.delete()
             response = redirect("/Orders/")
             return response
         else:
@@ -651,6 +641,147 @@ def Delete(request):
 
 
 
+
+def dabrha_Checkout(request,request_id,Offer_id):
+    dabrha=DabrhaRequest.objects.get(id=request_id)
+    offer=dabrha_offers.objects.get(id=Offer_id)
+    if request.method == "POST":
+        DabrhaOrders.objects.create(
+            customer=dabrha.customer,
+            Request=dabrha,
+            store=offer.store,
+            Date=datetime.datetime.now().date(),
+            price=offer.offer_price
+        )
+        
+        response = redirect("/home/")
+        return response
+
+    context = {
+        "dabrha": dabrha,"offer":offer
+
+    }
+    return render(request, "SCP/dabrhacheckout.html", context)
+
+
+
+
+
+
+def dabrha_service(request):
+    if request.method == "GET":
+        customer = request.user
+        if customer.customers is not None:
+            all_requests = DabrhaRequest.objects.filter(customer=customer)
+            dabrha_requests=[]
+            for requests in all_requests:
+                offer=dabrha_offers.objects.all().filter(dabrha_request=requests).order_by("offer_price").first()
+                dabrha_requests.append({"request":requests,"offer":offer})
+
+
+            context = {
+                'requests': dabrha_requests,
+            }        
+
+        else:
+            messages.info = (request, "You do Not Have Any Request")
+        
+
+        return render(
+            request, "SCP/dabrha.html", context
+        )
+
+
+def dabrha_request(request):
+    if request.method == "POST":
+    
+
+        customer = Customer.objects.get(pk=request.user.id)
+        add_customer = dict(request.POST)
+        add_customer["customer"] = customer
+        form = DabrhaRequestForm(data=add_customer)
+
+
+        if form.is_valid():
+            try:
+                if request.POST['img']:
+                    save_data_with_image=form.save(commit=False)
+                    save_data_with_image.img = request.POST['img']
+                    save_data_with_image.save()
+                else:
+                    form.save()
+
+                messages.success(request, "Your request has been sent")
+                return redirect("scp:dabrha")
+
+            except ValueError:
+                error
+                messages.error(request, "error")
+                return redirect("scp:dabrha")
+
+        else:
+            print(form.errors.items())
+            return redirect("scp:dabrha")
+
+    else:
+        form = DabrhaRequestForm()
+        return render(request, "SCP/dabrhaForm.html", context={"form": form})
+
+
+def dabrha_orders(request):
+
+    requests = DabrhaRequest.objects.all()
+
+    return render(
+        request, "SCP/store/dabrha-orders.html", context={"requests": requests}
+    )
+
+
+def make_offers_for_dabrha(request, request_id):
+
+    if request.method == "POST":
+        print(request.user)
+        offer = {
+            'offer_price': request.POST['offer_price'],
+            'store': request.user.id,
+            'dabrha_request':request_id
+        }
+        form = DabrhaRequestFormForStores(data=offer)
+
+        if form.is_valid():
+            # price = form.cleaned_data["offer_price"]
+            # request_object = DabrhaRequest.objects.filter(pk=request_id)
+            # request_object.update(offer_price=price, has_an_offer=True)
+            # print(f"{price}, {request_object}")
+
+            form.save()
+            print('validated')
+            return redirect("scp:dabrha-orders")
+
+        else:
+            print('not validated')
+            print(form.errors.items())
+            return redirect("scp:dabrha-orders")
+
+    else:
+        return redirect("scp:dabrha_orders")
+
+
+
+def cancel_dabrha_request(request, request_id):
+
+    canceled_request = DabrhaRequest.objects.filter(pk=request_id)
+    print('here')
+    
+    try:
+        canceled_request.delete()
+
+        messages.success(request, f"Request number:{request_id} deleted successfully")
+
+        return redirect('scp:dabrha')
+
+    except:
+        return HttpResponseForbidden()
 
 
 

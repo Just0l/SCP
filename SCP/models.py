@@ -143,3 +143,40 @@ class Offers(models.Model):
     )
     offer_desc = models.CharField(max_length=200)
     offer_price = models.IntegerField()
+
+
+
+
+
+
+
+
+class DabrhaRequest(models.Model):
+    customer = models.ForeignKey(Customer, related_name='customers', on_delete=models.CASCADE)
+    part_no = models.CharField(max_length=20, null=True)
+    P_name = models.CharField(max_length=100)
+    car_manu = models.CharField(max_length=150)
+    car_name = models.CharField(max_length=150)
+    manufacture_year = models.CharField(max_length=10)
+    original = models.BooleanField()
+    desc = models.TextField()
+    img = models.ImageField(
+        upload_to="media/part_images/",
+        default="no-image.jpg",
+    )
+
+
+
+class DabrhaOrders(models.Model):
+    Request = models.ForeignKey(DabrhaRequest, related_name='store', on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, related_name='customer', on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, related_name='store', on_delete=models.CASCADE)
+    Date = models.DateField()
+    price = models.FloatField()
+
+
+
+class dabrha_offers(models.Model):
+    offer_price = models.FloatField()
+    store = models.ForeignKey(Store, related_name='store_made_offer', on_delete=models.CASCADE)
+    dabrha_request = models.ForeignKey(DabrhaRequest, related_name='d_request', on_delete=models.CASCADE)

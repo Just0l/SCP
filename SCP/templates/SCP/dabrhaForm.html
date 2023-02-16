@@ -1,55 +1,12 @@
 {% extends 'SCP/base.html'%}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
 
 {% block content %}
+<body>
 
-    <!-- ...:::: Start Mobile Header Section:::... -->
-    <div class="mobile-header-section d-block d-lg-none">
-        <!-- Start Mobile Header Wrapper -->
-        <div class="mobile-header-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-between align-items-center">
-                        <div class="mobile-header--left">
-                             <a href="index.html" class="mobile-logo-link">
-                                <img src="assets/images/logo/logo.png" alt="" class="mobile-logo-img">
-                            </a>
-                        </div>
-                        <div class="mobile-header--right">
-                            <a href="#mobile-menu-offcanvas" class="mobile-menu offcanvas-toggle">
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- End Mobile Header Wrapper -->
-    </div> <!-- ...:::: Start Mobile Header Section:::... -->
-    <!-- ...:::: Start Mobile Header Section:::... -->
-    <div class="mobile-header-section d-block d-lg-none">
-        <!-- Start Mobile Header Wrapper -->
-        <div class="mobile-header-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-between align-items-center">
-                        <div class="mobile-header--left">
-                             <a href="index.html" class="mobile-logo-link">
-                                <img src="assets/images/logo/logo.png" alt="" class="mobile-logo-img">
-                            </a>
-                        </div>
-                        <div class="mobile-header--right">
-                            <a href="#mobile-menu-offcanvas" class="mobile-menu offcanvas-toggle">
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                                <span class="mobile-menu-dash"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- End Mobile Header Wrapper -->
-    </div> <!-- ...:::: Start Mobile Header Section:::... -->
+
 
     <!-- ...:::: Start Offcanvas Mobile Menu Section:::... -->
     <div id="mobile-menu-offcanvas" class="offcanvas offcanvas-leftside offcanvas-mobile-menu-section">
@@ -89,8 +46,8 @@
                         <a class="mobile-user-menu-link" href="">English</a>
                         <!-- Header Top Menu's Dropdown -->
                         <ul class="mobile-user-sub-menu">
-                            <li><a href=""><img class="user-sub-menu-link-icon" src="assets/images/icon/lang-en.png" alt=""> English</a></li>
-                            <li><a href=""><img class="user-sub-menu-link-icon" src="assets/images/icon/lang-gr.png" alt=""> Germany</a></li>
+                            <li><a href=""><img class="user-sub-menu-link-icon" src="static/images/icon/lang-en.png" alt=""> English</a></li>
+                            <li><a href=""><img class="user-sub-menu-link-icon" src="static/images/icon/lang-gr.png" alt=""> Germany</a></li>
                         </ul>
                     </li>
                 </ul> <!-- End Header Top Menu -->
@@ -105,7 +62,7 @@
                 </form>
                 <div class="mobile-menu-customer-support">
                     <div class="mobile-menu-customer-support-icon">
-                        <img src="assets/images/icon/support-icon.png" alt="">
+                        <img src="static/images/icon/support-icon.png" alt="">
                     </div>
                     <div class="mobile-menu-customer-support-text">
                         <span>Customer Support</span>
@@ -252,7 +209,7 @@
                 <li class="offcanvas-cart-item-single">
                     <div class="offcanvas-cart-item-block">
                         <a href="" class="offcanvas-cart-item-image-link">
-                            <img src="assets/images/products_images/aments_products_image_6.jpg" alt="" class="offcanvas-cart-image">
+                            <img src="static/images/products_images/aments_products_image_6.jpg" alt="" class="offcanvas-cart-image">
                         </a>
                         <div class="offcanvas-cart-item-content">
                             <a href="" class="offcanvas-cart-item-link">Car Wheel</a>
@@ -269,7 +226,7 @@
                 <li class="offcanvas-cart-item-single">
                     <div class="offcanvas-cart-item-block">
                         <a href="" class="offcanvas-cart-item-image-link">
-                            <img src="assets/images/categories_images/aments_categories_08.jpg" alt="" class="offcanvas-cart-image">
+                            <img src="static/images/categories_images/aments_categories_08.jpg" alt="" class="offcanvas-cart-image">
                         </a>
                         <div class="offcanvas-cart-item-content">
                             <a href="" class="offcanvas-cart-item-link">Car Vails</a>
@@ -286,7 +243,7 @@
                 <li class="offcanvas-cart-item-single">
                     <div class="offcanvas-cart-item-block">
                         <a href="" class="offcanvas-cart-item-image-link">
-                            <img src="assets/images/products_images/aments_products_image_2.jpg" alt="" class="offcanvas-cart-image">
+                            <img src="static/images/products_images/aments_products_image_2.jpg" alt="" class="offcanvas-cart-image">
                         </a>
                         <div class="offcanvas-cart-item-content">
                             <a href="" class="offcanvas-cart-item-link">Shock Absorber</a>
@@ -327,7 +284,7 @@
                 <li class="offcanvas-wishlist-item-single">
                     <div class="offcanvas-wishlist-item-block">
                         <a href="" class="offcanvas-wishlist-item-image-link">
-                            <img src="assets/images/products_images/aments_products_image_6.jpg" alt="" class="offcanvas-wishlist-image">
+                            <img src="static/images/products_images/aments_products_image_6.jpg" alt="" class="offcanvas-wishlist-image">
                         </a>
                         <div class="offcanvas-wishlist-item-content">
                             <a href="" class="offcanvas-wishlist-item-link">Car Wheel</a>
@@ -344,7 +301,7 @@
                 <li class="offcanvas-wishlist-item-single">
                     <div class="offcanvas-wishlist-item-block">
                         <a href="" class="offcanvas-wishlist-item-image-link">
-                            <img src="assets/images/categories_images/aments_categories_08.jpg" alt="" class="offcanvas-wishlist-image">
+                            <img src="static/images/categories_images/aments_categories_08.jpg" alt="" class="offcanvas-wishlist-image">
                         </a>
                         <div class="offcanvas-wishlist-item-content">
                             <a href="" class="offcanvas-wishlist-item-link">Car Vails</a>
@@ -361,7 +318,7 @@
                 <li class="offcanvas-wishlist-item-single">
                     <div class="offcanvas-wishlist-item-block">
                         <a href="" class="offcanvas-wishlist-item-image-link">
-                            <img src="assets/images/products_images/aments_products_image_2.jpg" alt="" class="offcanvas-wishlist-image">
+                            <img src="static/images/products_images/aments_products_image_2.jpg" alt="" class="offcanvas-wishlist-image">
                         </a>
                         <div class="offcanvas-wishlist-item-content">
                             <a href="" class="offcanvas-wishlist-item-link">Shock Absorber</a>
@@ -391,13 +348,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
-                        <h3 class="breadcrumb-title">Service Details</h3>
+                        <h3 class="breadcrumb-title">Dabrha Request</h3>
                         <div class="breadcrumb-nav">
                             <nav aria-label="breadcrumb">
                                 <ul>
                                     <li><a href="index.html">Home</a></li>
                                     <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Service Details</li>
+                                    <li class="active" aria-current="page">Login</li>
                                 </ul>
                             </nav>
                         </div>
@@ -407,72 +364,81 @@
         </div>
     </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
-    <!-- Start Product Details Section -->
-    <div class="product-details-section">
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer_login">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="product-details-gallery-area" data-aos="fade-up"  data-aos-delay="0">
-                        <div class="product-large-image product-large-image-horaizontal">
-                            <div class="product-image-large-single zoom-image-hover">
-                                <img src="{{Services.image_field.url}}" alt="">
+
+
+                <!--register area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form register" data-aos="fade-up"  data-aos-delay="200">
+                        <h3>Part Info</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="default-form-box mb-20">
+                                <label>Part Number <span>*</span></label>
+                                {{form.part_no}}
+                                {% comment %} <input type="text"> {% endcomment %}
                             </div>
+                            <div class="default-form-box mb-20">
+                                <label>Part Name <span>*</span></label>
+                                {{form.P_name}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+
                             
-                        </div>
-                        <div class="product-image-thumb product-image-thumb-horizontal pos-relative">
+                            <div class="default-form-box mb-20">
+                                <label>Car Manufacture <span>*</span></label>
+                                {{form.car_manu}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>Car Name <span>*</span></label>
+                                {{form.car_name}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>Manufacture Year<span>*</span></label>
+                                {{form.manufacture_year}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                         
+                            <div class="default-form-box mb-20">
+                                <label>Is it original <span>*</span></label>
+                                {{form.original}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>Part Descrioption <span>*</span></label>
+                                {{form.desc}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+                            <div class="default-form-box mb-20">
+                                {% comment %} <label>Customer <span>*</span></label> {% endcomment %}
+                                {{form.customer.as_hidden}}
+                                {% comment %} <input type="password"> {% endcomment %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Part Image</label>
+                                <input class="form-control" name="img" type="file" id="formFile" />
+                            </div>
+                    
+
+                            <div class="login_submit">
+                                <button type="submit">Send</button>
+                            </div>
+
                             
-                        </div>
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="product-details-content-area" data-aos="fade-up"  data-aos-delay="200">
-                        <!-- Start  Product Details Text Area-->
-                        <div class="product-details-text">
-                            <h4 class="title">{{Services.name}}</h4>
-                            
-                            <h6 class="product-ref mb-20">Reference By:  {{ Services.W_id.username }}</span></h6>
-                            
-                            <div class="d-flex align-items-center">
-                                <div class="product-review">
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                    <span class="review-empty"><i class="fa fa-star"></i></span>
-                                </div>
-                                <a href="" class="customer-review">(customer review )</a>
-                            </div>
-                            
-                            <div class="price">${{ Services.price }}</div>
-                            <p>{{Services.DESCRIPTION}}</p>
-                        </div> <!-- End  Product Details Text Area-->
-                        <!-- Start Product Variable Area -->
-                        <div class="product-details-variable">
-                            <div class="product-add-to-cart-btn">
-                                <a href="{% url 'scp:PaymentForService' SID=Services.id%}"  data-bs-target="#modalAddcart">Booking an appointment</a>
-                            </div>
-                            <!-- Product Variable Single Item -->
-                             <!-- End Product Variable Area -->
-                        <!-- Start  Product Details Meta Area-->
-                        <!-- End  Product Details Meta Area-->
-                        <!-- Start  Product Details Social Area-->
-                         <!-- End  Product Details Social Area-->
-                    </div>
-                </div>
+                <!--register area end-->
             </div>
         </div>
-    </div> <!-- End Product Details Section -->
+    </div> <!-- ...:::: End Customer Login Section :::... -->
 
-     <!-- End Product Wrapper -->
-    </div> 
-
-
-
-
-
-
-
-    
     <!-- ...:::: Start Footer Section:::... -->
     <footer class="footer-section section-top-gap-100">
         <!-- Start Footer Top Area -->
@@ -482,13 +448,13 @@
                     <div class="col-lg-3 col-md-3 col-sm-5">
                         <div class="footer-widget footer-widget-contact" data-aos="fade-up"  data-aos-delay="0">
                             <div class="footer-logo">
-                                <a href="index.html"><img src="assets/images/logo/logo.png" alt="" class="img-fluid"></a>
+                                <a href="index.html"><img src="static/images/logo/logo.png" alt="" class="img-fluid"></a>
                             </div>
                             <div class="footer-contact">
                                 <p>We are a team of designers and developers that create high quality Magento, Prestashop, Opencart...</p>
                                 <div class="customer-support">
                                     <div class="customer-support-icon">
-                                        <img src="assets/images/icon/support-icon.png" alt="">
+                                        <img src="static/images/icon/support-icon.png" alt="">
                                     </div>
                                     <div class="customer-support-text">
                                         <span>Customer Support</span>
@@ -550,7 +516,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <div class="footer-payment">
-                            <a href=""><img class="img-fluid" src="assets/images/icon/payment-icon.png" alt=""></a>
+                            <a href=""><img class="img-fluid" src="static/images/icon/payment-icon.png" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -579,7 +545,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="modal-add-cart-product-img">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_1.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_1.jpg" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -623,42 +589,42 @@
                                 <div class="product-details-gallery-area">
                                     <div class="product-large-image modal-product-image-large">
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_1.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_1.jpg" alt="">
                                         </div>
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_2.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_2.jpg" alt="">
                                         </div>
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_3.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_3.jpg" alt="">
                                         </div>
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_4.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_4.jpg" alt="">
                                         </div>
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_5.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_5.jpg" alt="">
                                         </div>
                                         <div class="product-image-large-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_6.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_6.jpg" alt="">
                                         </div>
                                     </div>
                                     <div class="product-image-thumb modal-product-image-thumb">
                                         <div class="zoom-active product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_1.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_1.jpg" alt="">
                                         </div>
                                         <div class="product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_2.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_2.jpg" alt="">
                                         </div>
                                         <div class="product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_3.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_3.jpg" alt="">
                                         </div>
                                         <div class="product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_4.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_4.jpg" alt="">
                                         </div>
                                         <div class="product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_5.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_5.jpg" alt="">
                                         </div>
                                         <div class="product-image-thumb-single">
-                                            <img class="img-fluid" src="assets/images/products_images/aments_products_image_6.jpg" alt="">
+                                            <img class="img-fluid" src="static/images/products_images/aments_products_image_6.jpg" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -735,4 +701,4 @@
             </div>
         </div>
     </div> <!-- End Modal Quickview cart -->
-    {% endblock %}
+{% endblock %}
