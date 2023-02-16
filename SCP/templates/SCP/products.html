@@ -569,6 +569,7 @@
                                             <div class="row">
                                                 
                                                 {% for part in parts %}
+                                                {%if part.SP %}
                                                 <div class="col-xl-4 col-sm-6 col-12">
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-default-single border-around" data-aos="fade-up"  data-aos-delay="400">
@@ -591,6 +592,7 @@
                                                         </div>
                                                     </div> <!-- End Product Defautlt Single -->
                                                 </div>
+                                                {%endif%}
                                                 {% endfor %}
                                             </div>
                                             

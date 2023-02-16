@@ -11,7 +11,6 @@ class Categories(models.Model):
 class Parts(models.Model):
     part_no = models.CharField(primary_key=True, max_length=20)
     P_name = models.CharField(max_length=100)
-    quantity = models.IntegerField()
     car_manu = models.CharField(max_length=150)
     car_name = models.CharField(max_length=150)
     manufacture_year = models.CharField(max_length=10)
@@ -36,6 +35,7 @@ class Store_parts(models.Model):
     S_id = models.ForeignKey(Store, on_delete=models.CASCADE,  related_name='StoreParts')
     Price = models.FloatField()
     p_id =  models.ForeignKey(Parts, on_delete=models.CASCADE, related_name='parts')
+    quantity = models.IntegerField()
 
 
 class Cart(models.Model):
@@ -68,13 +68,13 @@ class Store_Image(models.Model):
 
 
 class Customer_orders(models.Model):
-    co_id = models.IntegerField(primary_key=True)
     S_id = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="StoreOders")
     C_id = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name="CustomerOders"
     )
     op_id = models.ForeignKey(Ordered_parts, on_delete=models.CASCADE)
     Date = models.DateField()
+    quantity = models.IntegerField()
 
 
 
@@ -103,6 +103,7 @@ class Workshop_Image(models.Model):
     imageheight = models.PositiveIntegerField(editable=False, default=50)
 
 
+
 class Services(models.Model):
     W_id = models.ForeignKey(
         Workshop, on_delete=models.CASCADE, related_name="WorkshopServices"
@@ -110,6 +111,16 @@ class Services(models.Model):
     name = models.CharField(max_length=75)
     price = models.IntegerField()
     DESCRIPTION = models.TextField()
+    image_field = models.ImageField(
+        upload_to="static/images/Services/{0}".format(
+            strftime("%Y%m%d-%H%M%S", gmtime())
+        ),
+        default="no-image.jpg",
+        width_field="imagewidth",
+        height_field="imageheight",
+    )
+    imagewidth = models.PositiveIntegerField(editable=False, default=50)
+    imageheight = models.PositiveIntegerField(editable=False, default=50)
 
 
 class Appointment(models.Model):

@@ -41,7 +41,7 @@
                     <div class="col-3">
                         <!-- Logo Header -->
                         <div class="header-logo">
-                            <a href="index.html"><img src="{% static 'images/logo/logo3.jpeg' %}" alt=""></a>
+                            <a href="{% url 'scp:home-page'%}"><img src="{% static 'images/logo/logo3.jpeg' %}" alt=""></a>
                         </div>
                     </div>
                     <div class="col-6">
@@ -114,11 +114,12 @@
                                                 <li class="mega-menu-item">
                                                     <a href="#" class="mega-menu-item-title">Other Pages</a>
                                                     <ul class="mega-menu-sub">
-                                                        <li><a href="cart.html">Cart</a></li>
-                                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                                        <li><a href="compare.html">Compare</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
                                                         {% if user.is_authenticated %}
+                                                        <li><a href="{% url 'scp:CartPage' %}">Cart</a></li>
+                                                        <li><a href="{% url 'scp:Orders' %}">Orders</a></li>
+                                                        <li><a href="{% url 'scp:ShowAppointmentForCustomer' %}">Show Appointment</a></li>
+                                                        <li><a href="{% url 'scp:CartPage' %}">Checkout</a></li>
+                                                       
                                                         <li><a href="{% url 'scp:logout' %}">Logout</a></li>
                                                         {%else %}
                                                         <li><a href="{% url 'scp:login' %}">login</a></li>

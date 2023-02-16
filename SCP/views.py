@@ -12,18 +12,21 @@ from .forms import (
     AddPartsForm,
     PartsImages,
     AddserviceForm,
-    UpdateCart
+    UpdateCart,
+    ServiceImage,
+    Dateandtime,
+    LoginForm,
 )
 from django.contrib import messages
 from User.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import authenticate, login
-
+from django.contrib.auth import authenticate, login, logout
+from django.views.generic import TemplateView, CreateView
 import datetime
 
 
-from django.views.generic import TemplateView, CreateView
+
 
 
 def is_customer(user):
@@ -38,19 +41,32 @@ def is_workshop(user):
     return user.is_authenticated and user.role == "WORKSHOP"
 
 
-class CustomerLogin(LoginView):
-    template_name = "SCP/login.html"
+def CustomerLogin(request):
+    form=LoginForm()
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        print(user is not None)
+        if user is not None:
+            login(request, user)
+            if request.user.role=="CUSTOMER":
+                return redirect("scp:home-page")
+            elif request.user.role=="STORE":
+                return redirect("scp:store-home")
+            elif request.user.role=="WORKSHOP":
+                return redirect("scp:workshop-home")
+            # Redirect to a success page.
+            ...
+        else:
+            # Return an 'invalid login' error message.
+            ...
+    context={"form":form}
+    return render(request, "SCP/login.html",context)
+    
 
 
-class WsLogin(LoginView):
-    template_name = "SCP/login.html"
 
-    def form_valid(self, form):
-        login(self.request, form.get_user())
-        return self.redirec_ws()
-
-    def redirec_ws(self):
-        return redirect("scp:workshop-home")
 
 
 def home_page(request):
@@ -60,7 +76,7 @@ def home_page(request):
 
 
 def register(request):
-
+    form = CustomUserCreationForm()
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -68,12 +84,58 @@ def register(request):
             username = form.cleaned_data.get("username")
             messages.success(request, f"Account Created for {username}")
             return redirect("scp:home-page")
+        else:
+            messages.info(request, "try another username")
+            return redirect("scp:registerUser")
 
     else:
         form = CustomUserCreationForm()
         context = {"form": form}
 
         return render(request, "SCP/registration.html", context)
+
+
+
+def register_store(request):
+    form = StoreCreationForm()
+    if request.method == "POST":
+        form = StoreCreationForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            messages.success(request, f"Account Created for {username}")
+            return redirect("scp:home-page")
+
+        else:
+            messages.info(request, "try another username")
+            return redirect("scp:registerStore")
+
+    else:
+        
+        context = {"form": form}
+
+        return render(request, "SCP/store/auth-register-basic.html", context)
+
+
+def register_workshop(request):
+    form = WorkshopUserCreationForm()
+    if request.method == "POST":
+        form = WorkshopUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("scp:login")
+        else:
+            messages.info(request, "try another username")
+            return redirect("scp:registerWs")
+
+
+    else:
+        form = WorkshopUserCreationForm()
+        context = {"form": form}
+
+        return render(request, "SCP/ws/auth-register-basic.html", context)
+
 
 
 def customer_account(request):
@@ -135,7 +197,7 @@ def Product_Details(request, SP ,partNo):
 
     if request.method =="POST":
         Quantity=request.POST['Quantity']
-        if Cart.objects.all().filter(C_id=User.objects.get(id=4),p_id=store_parts).exists():
+        if Cart.objects.all().filter(C_id=request.user).exists():
             cart=Cart.objects.get(p_id=store_parts)
             Q=int(cart.Q)
             print(Q)
@@ -145,7 +207,7 @@ def Product_Details(request, SP ,partNo):
             cart.save()
 
         else:
-            Cart.objects.create(C_id=User.objects.get(id=4),p_id=store_parts,Q=Quantity)
+            Cart.objects.create(C_id=request.user,p_id=store_parts,Q=Quantity)
         response = redirect('/Cart/')
         return response
        
@@ -164,7 +226,7 @@ def DeleteCart(request):
 
 
 def CartPage(request):
-    cart = Cart.objects.all().filter(C_id=User.objects.get(id=4))
+    cart = Cart.objects.all().filter(C_id=request.user)
     form=UpdateCart()
     parts = []
     total=0
@@ -204,38 +266,9 @@ def workshop_main_page(request):
 # Creating new Store Account
 
 
-def register_store(request):
-
-    if request.method == "POST":
-        form = StoreCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("scp:store-home")
-
-        else:
-            messages.info(request, "try another username")
-            return redirect("scp:registerStore")
-
-    else:
-        form = StoreCreationForm()
-        context = {"form": form}
-
-        return render(request, "SCP/store/auth-register-basic.html", context)
 
 
-def register_workshop(request):
 
-    if request.method == "POST":
-        form = WorkshopUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("scp:login")
-
-    else:
-        form = WorkshopUserCreationForm()
-        context = {"form": form}
-
-        return render(request, "SCP/ws/workshop-registration.html", context)
 
 
 def add_parts(request):
@@ -243,20 +276,33 @@ def add_parts(request):
     if request.method == "POST":
         imageForm = PartsImages(request.POST, request.FILES)
         if imageForm.is_valid():
-            added_part = Parts.objects.create(part_no=request.POST['part_no'],
-            P_name=request.POST['P_name'],
-            quantity=1,
-            car_manu=request.POST['car_manu'],
-            car_name=request.POST['car_name'],
-            manufacture_year=request.POST['P_name'],
-            original=True,
-            category=Categories.objects.get(id=request.POST['category']),
-            desc=request.POST['desc'])
+            if not Parts.objects.all().filter(part_no=request.POST['part_no']).exists():
+                added_part = Parts.objects.create(part_no=request.POST['part_no'],
+                P_name=request.POST['P_name'],
+                car_manu=request.POST['car_manu'],
+                car_name=request.POST['car_name'],
+                manufacture_year=request.POST['P_name'],
+                original=True,
+                category=Categories.objects.get(id=request.POST['category']),
+                desc=request.POST['desc'])
+                store_part=Store_parts.objects.create(S_id=request.user,p_id=added_part,Price=request.POST['price'],quantity=1,)
+                store_part.save()
 
-            image = imageForm.cleaned_data.get("image_field")
-            Part_Image.objects.create(P_id=added_part, image_field=image)
-            messages.success(request, "part added to your store !")
-            return redirect("scp:add-parts")
+                image = imageForm.cleaned_data.get("image_field")
+                Part_Image.objects.create(P_id=added_part, image_field=image)
+                messages.success(request, "part added to your store !")
+                return redirect("scp:add-parts")
+            else:
+                if not Store_parts.objects.all().filter(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no'])).exists():
+                    store_part=Store_parts.objects.create(S_id=request.user,p_id=Parts.objects.get(part_no=request.POST['part_no']),Price=request.POST['price'],quantity=request.POST['quantity'])
+                    store_part.save()
+                    messages.warning(request, "part is already exist and it will be in your store !")
+                    return redirect("scp:add-parts")
+                else:
+                    messages.error(request, "part is already exist !")
+                    return redirect("scp:add-parts")
+
+
 
 
     else:
@@ -269,7 +315,7 @@ def add_parts(request):
 
 def store_parts(request):
 
-    all_parts = Parts.objects.all()
+    all_parts = Store_parts.objects.all()
     parts_pks = all_parts.values_list("pk", flat=True)
     parts = []
     print(type(all_parts))
@@ -277,7 +323,7 @@ def store_parts(request):
     for n in all_parts:
 
         parts.append(
-            {"part_obj": n, "part_img": Part_Image.objects.get(P_id=n.part_no)}
+            {"part_obj": n.p_id, "part_img": Part_Image.objects.get(P_id=n.p_id.part_no)}
         )
 
     print(parts)
@@ -286,16 +332,86 @@ def store_parts(request):
 
 
 def customers_orders(request):
-
-    return render(request, "SCP/store/orders.html")
-
+    orders = Customer_orders.objects.all().filter(S_id=request.user)
 
 
-
+    return render(request, "SCP/store/orders.html",{"orders":orders})
 
 
 
+def Payment(request):
+    cart = Cart.objects.all().filter(C_id=request.user.id)
+    total=0
+    for item in cart:
+        total=total+(item.Q*item.p_id.Price)
+    context = {
+        "Cart":cart,
+        "total":total
 
+    }
+    return render(request, "SCP/checkout.html",context)
+
+
+def Pay(request):
+    cart=Cart.objects.all().filter(C_id=request.user.id)
+    for item in cart:
+        temp=int(Ordered_parts.objects.all().count())
+        Ordered=Ordered_parts.objects.create(op_id=temp,sp_id=item.p_id)
+        Customer_orders.objects.create(S_id=item.p_id.S_id,C_id=request.user,op_id=Ordered,Date=datetime.datetime.now().date(),quantity=item.Q)
+        Part=Store_parts.objects.get(id=item.p_id.id)
+        Part.quantity=Part.quantity-item.Q
+        Part.save()
+    response = redirect("/Orders/")
+    return response
+    
+
+
+
+def ShowOrder(request):
+    orders = Customer_orders.objects.all().filter(C_id=request.user)
+    show=[]
+    for i in orders:
+        show.append({"orders":i,"image":Part_Image.objects.get(P_id=i.op_id.sp_id.p_id)})
+    context={"obj":show}
+    return render(request, "SCP/Showorders.html",context)
+    
+
+
+def ShowServicesForCustomer(request):
+    services = Services.objects.all()
+    context={"Services":services}
+    return render(request, "SCP/Showservices.html", context)
+
+
+
+
+def ShowServicesForCustomerDetails(request,SID):
+    service = Services.objects.get(id=SID)
+    context={"Services":service}
+    return render(request, "SCP/ServicesDetails.html", context)
+
+
+
+
+def PaymentForService(request,SID):
+    service = Services.objects.get(id=SID)
+    date=Dateandtime()
+    if request.method =='POST':
+        Appointment.objects.create(service_id=service,W_id=service.W_id,C_id=request.user,Date=request.POST['Date'],Time=request.POST['Time'])
+        response = redirect("/ShowAppointmentForCustomer/")
+        return response
+    context={"Services":service,
+    "Date":date
+    }
+    return render(request, "SCP/Servicecheckout.html", context)
+
+
+
+
+def ShowAppointmentForCustomer(request):
+    appointment=Appointment.objects.all().filter(C_id=request.user)
+    context={"appointments":appointment}
+    return render(request, "SCP/ShowAppointmentForCustomer.html", context)
 
 
 
@@ -304,11 +420,11 @@ def customers_orders(request):
 def ShowServices(request):
     obj = Services.objects.all().filter(W_id=request.user.id)
 
-    obj1 = Workshop_Image.objects.get(W_id=User.objects.get(id=request.user.id))
+
 
     context = {
         "obj": obj,
-        "obj1": obj1,
+
     }
     return render(request, "SCP/ws/Showservices.html", context)
 
@@ -355,19 +471,25 @@ def Addservice(request):
     if request.user.is_authenticated:
         if request.user.role == "WORKSHOP":
             Add_form = AddserviceForm()
+            imageForm = ServiceImage()
 
             if request.method == "POST":
                 Add_form = AddserviceForm(request.POST)
-                if Add_form.is_valid():
+                imageForm = ServiceImage(request.POST, request.FILES)
+                print(Add_form.is_valid())
+                print(imageForm.is_valid())
+                if Add_form.is_valid() and imageForm.is_valid():
+                    image=imageForm.cleaned_data.get("image_field")
                     Services.objects.create(
                         W_id=User.objects.get(id=request.user.id, role="WORKSHOP"),
                         name=Add_form.cleaned_data["name"],
                         price=Add_form.cleaned_data["price"],
                         DESCRIPTION=Add_form.cleaned_data["des"],
+                        image_field=image
                     )
-                    response = redirect("/Workshop/Addservice/")
+                    response = redirect("/Workshop/ShowServices/")
                     return response
-            context = {"form": Add_form}
+            context = {"form": Add_form,"image":imageForm}
 
             return render(request, "SCP/ws/Addservice.html", context)
         else:
@@ -397,33 +519,6 @@ def Delete(request):
         return response
 
 
-def Update(request):
-    if request.user.is_authenticated:
-        if request.user.role == "WORKSHOP":
-            Add_form = AddserviceForm()
-
-            if request.method == "POST":
-                Add_form = AddserviceForm(request.POST)
-                if Add_form.is_valid():
-                    service = Services.objects.get(
-                        id=request.GET.get("UpdateID"), W_id=request.user.id
-                    )
-                    service.name = Add_form.cleaned_data["name"]
-                    service.price = Add_form.cleaned_data["price"]
-                    service.save()
-                    response = redirect("/Workshop/")
-                    return response
-            context = {"form": Add_form}
-            return render(request, "SCP/ws/Updateservice.html", context)
-        else:
-            response = redirect("/home/")
-            return response
-
-    else:
-        response = redirect("/home/")
-        return response
-
-
 
 
 
@@ -436,8 +531,14 @@ def Update(request):
 
 
 def LoginWSo(request):
-  user=User.objects.get(id=5)
+  user=User.objects.get(id=4)
   login(request, user)
 
   response = redirect('/workshop/')
+  return response
+
+
+def LogoutPage(request):
+  logout(request)
+  response = redirect('/Workshop/')
   return response

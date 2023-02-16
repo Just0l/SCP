@@ -4,25 +4,29 @@
 {% load static %}
 
 <div class="card">
-    <h5 class="card-header">Customers Orders</h5>
+    <h5 class="card-header">Show Services</h5>
     <div class="table-responsive text-nowrap">
       <table class="table">
         <thead>
           <tr>
+            <th>Delete</th>
             <th>Services Name</th>
             <th>Image</th>
             <th>Price</th>
+            
           </tr>
         </thead>
         <tbody class="table-border-bottom-0">
         {%if obj%}
         {% for type in obj %}
           <tr>
+            <td class="product_addcart"><a href="/Workshop/Delete/?DeleteID={{type.id}}"><i class="fa fa-trash-o"></i>Delete</a></td>
             <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{type.name}}</strong></td>
-            <td class="product_thumb"><img src="{{obj1.image_field.url}}" alt=""></td>
+            <td class="product_thumb"><img src="{{type.image_field.url}}" alt=""></td>
             <td>
                 ${{ type.price }}
             </td>
+            
           </tr>
           <tr>
             {% endfor %}
