@@ -302,6 +302,7 @@
                                                                             class="icon-shopping-cart"></i></a></li>
                                                             </ul>
                                                         </div>
+                                                        {%if request.offer%}
                                                         <div class="breadcrumb-nav">
                                                             <a href="{% url 'scp:delete-dabrha-request' request_id=request.request.pk %}" <button type="button"
                                                                 class="btn btn-danger btn-md">Decline Offer</button>
@@ -315,7 +316,7 @@
                                                     </div>
                                                 </div> <!-- End Product Defautlt Single -->
                                             </div>
-
+                                            {% endif %}
                                             {% endfor %}
 
 
