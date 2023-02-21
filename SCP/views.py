@@ -45,6 +45,8 @@ def CustomerLogin(request):
                 return redirect("scp:store-home")
             elif request.user.role=="WORKSHOP":
                 return redirect("scp:workshop-home")
+            elif request.user.role=="ADMIN":
+                return redirect("scp:AdminOfStore")
             # Redirect to a success page.
             ...
         else:
@@ -85,6 +87,21 @@ def register(request):
 
 
 
+
+def admin_main_page(request):
+    if request.user.is_authenticated:
+        if request.user.role == "ADMIN":
+
+            return render(request, "SCP/admin/Dashboard.html")
+        else:
+            response = redirect("scp:home-page")
+            return response
+
+    else:
+        response = redirect("scp:home-page")
+        return response
+        
+
 def register_store(request):
     form = StoreCreationForm()
     if request.method == "POST":
@@ -94,7 +111,7 @@ def register_store(request):
             form.save()
             username = form.cleaned_data.get("username")
             messages.success(request, f"Account Created for {username}")
-            return redirect("scp:home-page")
+            return redirect("scp:AdminOfStore")
 
         else:
             messages.info(request, "try another username")
@@ -104,7 +121,7 @@ def register_store(request):
         
         context = {"form": form}
 
-        return render(request, "SCP/store/auth-register-basic.html", context)
+        return render(request, "SCP/admin/auth-register-basic.html", context)
 
 
 def register_workshop(request):
@@ -113,7 +130,7 @@ def register_workshop(request):
         form = WorkshopUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("scp:login")
+            return redirect("scp:AdminOfStore")
         else:
             messages.info(request, "try another username")
             return redirect("scp:registerWs")
@@ -123,7 +140,7 @@ def register_workshop(request):
         form = WorkshopUserCreationForm()
         context = {"form": form}
 
-        return render(request, "SCP/ws/auth-register-basic.html", context)
+        return render(request, "SCP/admin/auth-register-basic-ws.html", context)
 
 
 
@@ -164,11 +181,11 @@ def store_main_page(request):
 
             return render(request, "SCP/store/Dashboard.html")
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -191,24 +208,22 @@ def Product_Details(request, SP ,partNo):
     }
     for p in img:
         print(p.image_field)
-
-    if request.method =="POST":
-        Quantity=request.POST['Quantity']
-        if request.user.is_authenticated:
+    if request.user.is_authenticated:
             if request.user.role == "CUSTOMER":
-                if Cart.objects.all().filter(C_id=request.user).exists():
-                    cart=Cart.objects.get(p_id=store_parts)
-                    Q=int(cart.Q)
-                    print(Q)
-                    Q+=int(Quantity)
-                    print(Q)
-                    cart.Q=Q
-                    cart.save()
-
-        else:
-            Cart.objects.create(C_id=request.user,p_id=store_parts,Q=Quantity)
-        response = redirect('/Cart/')
-        return response
+                if request.method =="POST":
+                    Quantity=request.POST['Quantity']
+                    if Cart.objects.all().filter(C_id=request.user).exists():
+                        cart=Cart.objects.get(p_id=store_parts)
+                        Q=int(cart.Q)
+                        print(Q)
+                        Q+=int(Quantity)
+                        print(Q)
+                        cart.Q=Q
+                        cart.save()
+                    else:
+                        Cart.objects.create(C_id=request.user,p_id=store_parts,Q=Quantity)
+                    response = redirect('/Cart/')
+                    return response
        
 
     return render(request, 'SCP/product-details.html', context)
@@ -225,11 +240,11 @@ def DeleteCart(request):
             response = redirect('/Cart/')
             return response
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -253,11 +268,11 @@ def CartPage(request):
             
             return render(request, 'SCP/cart.html', context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -274,11 +289,11 @@ def CartUpdate(request,CartID):
             response = redirect('/Cart/')
             return response
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -293,11 +308,11 @@ def workshop_main_page(request):
     
             return render(request, "SCP/ws/Dashboard.html")
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 # Creating new Store Account
@@ -351,11 +366,11 @@ def add_parts(request):
                 context = {"imageForm": imageForm, "categories": Categories.objects.all(),"image":image}
                 return render(request, "SCP/store/add-parts.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -379,11 +394,11 @@ def store_parts(request):
 
             return render(request, "SCP/store/show-parts.html", {"parts": parts})
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -395,11 +410,11 @@ def customers_orders(request):
 
             return render(request, "SCP/store/orders.html",{"orders":orders})
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -417,11 +432,11 @@ def Payment(request):
             }
             return render(request, "SCP/checkout.html",context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -442,11 +457,11 @@ def Pay(request):
             response = redirect("/Orders/")
             return response
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -461,11 +476,11 @@ def ShowOrder(request):
             context={"obj":show}
             return render(request, "SCP/Showorders.html",context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -502,11 +517,11 @@ def PaymentForService(request,SID):
             }
             return render(request, "SCP/Servicecheckout.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -518,11 +533,11 @@ def ShowAppointmentForCustomer(request):
             context={"appointments":appointment}
             return render(request, "SCP/ShowAppointmentForCustomer.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -542,11 +557,11 @@ def ShowServices(request):
             }
             return render(request, "SCP/ws/Showservices.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -580,11 +595,11 @@ def ShowAppointment(request):
 
             return render(request, "SCP/ws/Appointment.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -614,10 +629,10 @@ def Addservice(request):
 
             return render(request, "SCP/ws/Addservice.html", context)
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -627,16 +642,15 @@ def Delete(request):
             a = request.GET.get("DeleteID")
             if Services.objects.all().filter(id=a, W_id=request.user.id).exists():
                 obj = Services.objects.get(id=a, W_id=request.user.id)
-
                 obj.delete()
             response = redirect("/Workshop/")
             return response
         else:
-            response = redirect("/home/")
+            response = redirect("scp:home-page")
             return response
 
     else:
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
 
@@ -654,7 +668,7 @@ def dabrha_Checkout(request,request_id,Offer_id):
             price=offer.offer_price
         )
         
-        response = redirect("/home/")
+        response = redirect("scp:home-page")
         return response
 
     context = {
@@ -792,15 +806,3 @@ def cancel_dabrha_request(request, request_id):
 
 
 
-def LoginWSo(request):
-  user=User.objects.get(id=4)
-  login(request, user)
-
-  response = redirect('/workshop/')
-  return response
-
-
-def LogoutPage(request):
-  logout(request)
-  response = redirect('/Workshop/')
-  return response

@@ -133,3 +133,37 @@ class WorkshopProfile(models.Model):
 
 
 
+
+##-- Admin User Type --##
+
+# This class defines the Admin for query statements
+
+class AdminManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=User.Role.ADMIN)
+
+class Admin(User):
+    
+    base_role = User.Role.ADMIN
+
+    admin = AdminManager()
+
+    class Meta:
+        proxy = True
+
+    def welcome(self):
+        return "Only For Admin"
+
+@receiver(post_save, sender=Admin)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == "ADMIN":
+        AdminProfile.objects.create(user=instance)
+
+
+# Here the Admin profile is created and invoked
+# from the User(AbstractUser) for Authentication
+
+class AdminProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    C_id = models.IntegerField(null=True, blank=True)

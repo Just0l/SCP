@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from User.models import Customer, Store, Workshop
+from User.models import Customer, Store, Workshop, Admin
 from .models import Parts, Part_Image, DabrhaRequest, dabrha_offers
 
 class CustomUserCreationForm(UserCreationForm):
